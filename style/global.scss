@@ -1,0 +1,54 @@
+.board {
+  border: 1px solid white;
+  position: fixed;
+}
+
+.player {
+  display: flex;
+}
+
+body {
+  background-color: black;
+  color: aliceblue;
+}
+
+.colorPicker {
+  width: 100px;
+  height: 25px;
+  display: flex;
+  flex-direction: row;
+}
+
+.pickerChoice {
+  height: 20px;
+  width: 20px;
+  margin-left: 4px;
+}
+
+.picked {
+  height: 22px;
+  width: 22px;
+  border: 1px solid white;
+}
+
+/* The Colors for the different choices in the ColorPicker */
+.blue {
+  background-color: #0066ff;
+}
+.green {
+  background-color: #33cc33;
+}
+.yellow {
+  background-color: #ffff00;
+}
+.red {
+  background-color: #ff0000;
+}
+
+.setup {
+  position: absolute;
+  height: 200px;
+  width: 300px;
+  left: 350px;
+  top: 150px;
+}
