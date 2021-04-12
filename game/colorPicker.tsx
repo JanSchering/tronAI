@@ -1,31 +1,41 @@
 import * as React from "react";
 import { Color } from "./types";
 
-export const ColorPicker = ({
-  color,
-  clickHandler,
-}: Props): React.ReactElement => {
+export const ColorPicker = ({ color, callBack }: Props): React.ReactElement => {
+  const [currentColor, setCurrentColor] = React.useState(color);
+
+  const clickHandler = (color: Color) => {
+    setCurrentColor(color);
+    if (callBack) {
+      callBack(color);
+    }
+  };
+
   return (
     <div className="colorPicker">
       <div
-        className={`pickerChoice blue ${color === Color.BLUE ? "picked" : ""}`}
-        onClick={() => clickHandler("blue")}
+        className={`pickerChoice blue ${
+          currentColor === Color.BLUE ? "picked" : ""
+        }`}
+        onClick={() => clickHandler(Color.BLUE)}
       ></div>
       <div
-        className={`pickerChoice red ${color === Color.RED ? "picked" : ""}`}
-        onClick={() => clickHandler("red")}
+        className={`pickerChoice red ${
+          currentColor === Color.RED ? "picked" : ""
+        }`}
+        onClick={() => clickHandler(Color.RED)}
       ></div>
       <div
         className={`pickerChoice green ${
-          color === Color.GREEN ? "picked" : ""
+          currentColor === Color.GREEN ? "picked" : ""
         }`}
-        onClick={() => clickHandler("green")}
+        onClick={() => clickHandler(Color.GREEN)}
       ></div>
       <div
         className={`pickerChoice yellow ${
-          color === Color.YELLOW ? "picked" : ""
+          currentColor === Color.YELLOW ? "picked" : ""
         }`}
-        onClick={() => clickHandler("yellow")}
+        onClick={() => clickHandler(Color.YELLOW)}
       ></div>
     </div>
   );
@@ -33,5 +43,5 @@ export const ColorPicker = ({
 
 type Props = {
   color: Color;
-  clickHandler: Function;
+  callBack?: Function;
 };

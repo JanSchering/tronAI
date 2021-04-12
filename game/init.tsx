@@ -31,13 +31,13 @@ export const InitialForm = ({
       <div className="player">
         <label>Player 1</label>
         <input type="text" onBlur={(evt) => setNameP1(evt.target.value)} />
-        <ColorPicker color={colorP1} clickHandler={setColorP1} />
+        <ColorPicker color={colorP1} callBack={setColorP1} />
       </div>
       <br />
       <div className="player">
         <label>Player 2</label>
         <input type="text" onBlur={(evt) => setNameP2(evt.target.value)} />
-        <ColorPicker color={colorP2} clickHandler={setColorP2} />
+        <ColorPicker color={colorP2} callBack={setColorP2} />
       </div>
       <br />
       <input type="button" value="Done" onClick={handleDone} />

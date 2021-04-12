@@ -1,7 +1,10 @@
 import * as React from "react";
 
 export const useCanvas = (
-  callback: ([HTMLCanvasElement, CanvasRenderingContext2D]) => any
+  callback: ([canvas, ctx]: [
+    HTMLCanvasElement,
+    CanvasRenderingContext2D
+  ]) => any
 ): React.RefObject<HTMLCanvasElement> => {
   const canvasRef = React.useRef(null);
 

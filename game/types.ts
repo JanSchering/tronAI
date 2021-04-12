@@ -1,11 +1,3 @@
-export type PlayerProps = {
-  color: Color;
-  name: string;
-  coordinates: Coordinate;
-  direction?: Direction;
-  score?: number;
-};
-
 export enum Color {
   RED = "#ff0000",
   GREEN = "#33cc33",

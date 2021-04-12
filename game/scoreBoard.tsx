@@ -2,9 +2,6 @@ import * as React from "react";
 import { Player } from "./player";
 
 export const ScoreBoard = ({ p1, p2 }: Props): React.ReactElement => {
-  console.log(p1.score);
-
-  React.useEffect(() => {}, []);
 
   return (
     <div>
@@ -19,6 +16,12 @@ export const ScoreBoard = ({ p1, p2 }: Props): React.ReactElement => {
 };
 
 type Props = {
-  p1: Player;
-  p2: Player;
+  p1: {
+    name: string;
+    score: number | string;
+  };
+  p2: {
+    name: string;
+    score: number | string;
+  };
 };

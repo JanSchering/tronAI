@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as tf from "@tensorflow/tfjs";
-import { X_START, Y_START, CANVAS_WIDTH, CANVAS_HEIGHT } from "./literals.js";
+import { X_START, Y_START, CANVAS_WIDTH, CANVAS_HEIGHT } from "./literals";
 import { Player } from "./player";
 import { Coordinate, Direction, Color } from "./types";
 import { getColorCode } from "./utils";
@@ -13,17 +13,13 @@ import { getColorCode } from "./utils";
  */
 export const step = (
   player1: Player,
-  setP1Coordinates: (coordinates: Coordinate) => void,
-  setP2Coordinates: (coordinates: Coordinate) => void,
-  setP1Alive: (alive: boolean) => void,
-  setP2Alive: (alive: boolean) => void,
   player2: Player,
   ctx: CanvasRenderingContext2D
 ): void => {
-  movePlayer(player1, setP1Coordinates);
-  movePlayer(player2, setP2Coordinates);
-  setP1Alive(healthCheckup(player1, ctx, player2.color));
-  setP2Alive(healthCheckup(player2, ctx, player1.color));
+  player1.move();
+  player2.move();
+  player1.setAlive(healthCheckup(player1, ctx, player2.getColor()));
+  player2.setAlive(healthCheckup(player2, ctx, player1.getColor()));
 };
 
 /**
@@ -39,13 +35,10 @@ export const healthCheckup = (
   enemyColor: Color
 ): boolean => {
   let alive = true;
-  if (player.direction !== Direction.NONE) {
-    const positionLookAhead = ctx.getImageData(
-      player.coordinates.x,
-      player.coordinates.y,
-      1,
-      1
-    ).data;
+  if (player.getDirection() !== Direction.NONE) {
+    const { x, y } = player.getCoordinates();
+
+    const positionLookAhead = ctx.getImageData(x, y, 1, 1).data;
     const hex = getColorCode(
       positionLookAhead[0],
       positionLookAhead[1],
@@ -53,53 +46,14 @@ export const healthCheckup = (
     );
 
     alive =
-      !(hex === player.color) &&
+      !(hex === player.getColor()) &&
       !(hex === enemyColor) &&
-      player.coordinates.x >= 0 &&
-      player.coordinates.x < CANVAS_WIDTH &&
-      player.coordinates.y >= 0 &&
-      player.coordinates.y < CANVAS_HEIGHT;
+      x >= 0 &&
+      x < CANVAS_WIDTH &&
+      y >= 0 &&
+      y < CANVAS_HEIGHT;
   }
   return alive;
-};
-
-/**
- * @description Move the player one step in its current direction.
- * @param player
- * @param setCoordinates
- */
-export const movePlayer = (
-  player: Player,
-  setCoordinates: (coordinates: Coordinate) => void
-): void => {
-  switch (player.direction) {
-    case Direction.UP:
-      setCoordinates({
-        x: player.coordinates.x,
-        y: player.coordinates.y - 5,
-      });
-      break;
-    case Direction.DOWN:
-      setCoordinates({
-        x: player.coordinates.x,
-        y: player.coordinates.y + 5,
-      });
-      break;
-    case Direction.LEFT:
-      setCoordinates({
-        x: player.coordinates.x - 5,
-        y: player.coordinates.y,
-      });
-      break;
-    case Direction.RIGHT:
-      setCoordinates({
-        x: player.coordinates.x + 5,
-        y: player.coordinates.y,
-      });
-      break;
-    default:
-      break;
-  }
 };
 
 /**
@@ -108,8 +62,9 @@ export const movePlayer = (
  * @param ctx - The Rendering Context of the Canvas.
  */
 export const renderPlayer = (player: Player, ctx: CanvasRenderingContext2D) => {
-  ctx.fillStyle = player.color;
-  const { x, y } = player.coordinates;
+  ctx.fillStyle = player.getColor();
+  const { x, y } = player.getCoordinates();
+  console.log(x, y, player.getColor());
   ctx.fillRect(x, y, 5, 5);
 };
 
@@ -126,20 +81,16 @@ export const renderPlayer = (player: Player, ctx: CanvasRenderingContext2D) => {
 export const reset = (
   p1: Player,
   p2: Player,
-  setP1Direction: (direction: Direction) => void,
-  setP1Coordinates: (coordinates: Coordinate) => void,
-  setP2Coordinates: (coordinates: Coordinate) => void,
-  setP2Direction: (Direction: Direction) => void,
   ctx: CanvasRenderingContext2D
 ) => {
   // Reset the directions of the players
-  setP1Direction(Direction.NONE);
-  setP2Direction(Direction.NONE);
+  p1.setDirection(Direction.NONE);
+  p2.setDirection(Direction.NONE);
   // Clear the canvas
   ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   // Reset the coordinates of the players to the initial coordinates
-  setP1Coordinates({ x: X_START, y: Y_START });
-  setP2Coordinates({ x: X_START, y: Y_START * 2 });
+  p1.setCoordinates({ x: X_START, y: Y_START });
+  p2.setCoordinates({ x: X_START, y: Y_START * 2 });
 
   // Render the players in their initial positions
   renderPlayer(p1, ctx);
@@ -151,16 +102,16 @@ export const reset = (
  * @param ctx - The Canvas Rendering Context of the Game board.
  * @returns
  */
-export const getStateTensor = (ctx) => {
+export const getStateTensor = (ctx: CanvasRenderingContext2D) => {
   //TODO: The Tensor is currently only using the canvas information. Need to also append the current coordinates
   // and the current direction of the player to the Tensor. Those are super important.
   return tf.tidy(() => {
     let imageData = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT).data;
 
     const downScaled = new Array();
-    const red = [];
-    const green = [];
-    const blue = [];
+    const red: number[] = [];
+    const green: number[] = [];
+    const blue: number[] = [];
     imageData.forEach((channel, idx) => {
       switch (idx % 4) {
         case 0:
@@ -199,60 +150,53 @@ export const getStateTensor = (ctx) => {
  * @param setP1Direction - Setter: Function to set the direction of Player 1.
  * @param setP2Direction - Setter: Function to set the direction of Player 2.
  */
-export const keydownListener = (
-  player1: Player,
-  player2: Player,
-  setP1Direction: (direction: Direction) => void,
-  setP2Direction: (direction: Direction) => void
-): void => {
+export const keydownListener = (player1: Player, player2: Player): void => {
   document.addEventListener("keydown", (event) => {
     if (event.isComposing || event.keyCode === 229) {
       return;
     }
-    console.log("keydown registered");
-    console.log(setP1Direction);
-    const prevDirectionP1 = player1.direction;
-    const prevDirectionP2 = player2.direction;
+    const prevDirectionP1 = player1.getDirection();
+    const prevDirectionP2 = player2.getDirection();
     const keyCode = event.keyCode;
     switch (keyCode) {
       case 38:
         if (prevDirectionP1 !== Direction.DOWN) {
-          setP1Direction(Direction.UP);
+          player1.setDirection(Direction.UP);
         }
         break;
       case 40:
         if (prevDirectionP1 !== Direction.UP) {
-          setP1Direction(Direction.DOWN);
+          player1.setDirection(Direction.DOWN);
         }
         break;
       case 39:
         if (prevDirectionP1 !== Direction.LEFT) {
-          setP1Direction(Direction.RIGHT);
+          player1.setDirection(Direction.RIGHT);
         }
         break;
       case 37:
         if (prevDirectionP1 !== Direction.RIGHT) {
-          setP1Direction(Direction.LEFT);
+          player1.setDirection(Direction.LEFT);
         }
         break;
       case 87:
         if (prevDirectionP2 !== Direction.DOWN) {
-          setP2Direction(Direction.UP);
+          player2.setDirection(Direction.UP);
         }
         break;
       case 65:
         if (prevDirectionP2 !== Direction.RIGHT) {
-          setP2Direction(Direction.LEFT);
+          player2.setDirection(Direction.LEFT);
         }
         break;
       case 68:
         if (prevDirectionP2 !== Direction.LEFT) {
-          setP2Direction(Direction.RIGHT);
+          player2.setDirection(Direction.RIGHT);
         }
         break;
       case 83:
         if (prevDirectionP2 !== Direction.UP) {
-          setP2Direction(Direction.DOWN);
+          player2.setDirection(Direction.DOWN);
         }
         break;
     }
