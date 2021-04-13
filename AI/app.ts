@@ -3,7 +3,8 @@ import { Orchestrator } from "./orchestrator";
 import { Memory } from "./memory";
 import { createCanvas } from "./visual.js";
 import * as Literals from "../game/literals";
-import styles from "../style/canvas.module";
+import "../style/global.scss";
+import * as tf from "@tensorflow/tfjs";
 
 /**
  * The role of the policy network is to select an action based on the observed
@@ -12,21 +13,34 @@ import styles from "../style/canvas.module";
  * which turn the players' character in the according direction.
  */
 class PolicyNetwork {
-  constructor(canvas) {
+  canvas: HTMLCanvasElement;
+  memory: Memory;
+  p1Model: Model;
+  p2Model: Model;
+
+  constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
     this.memory = new Memory(500);
     this.p1Model = new Model(100);
     this.p2Model = new Model(100);
   }
 
-  async train(discountRate = 0.95, numGames = 1000, maxStepsPerGame = 500) {
+  async train(
+    discountRate = 0.95,
+    numGames = 1000,
+    maxStepsPerGame = 500,
+    logRewardParam = 1,
+    inputshape: Array<number>
+  ) {
     const orchestrator = new Orchestrator(
       this.canvas,
       this.p1Model,
       this.p2Model,
       this.memory,
       discountRate,
-      maxStepsPerGame
+      maxStepsPerGame,
+      logRewardParam,
+      inputshape
     );
     for (let i = 0; i < numGames; ++i) {
       await orchestrator.run();
@@ -53,12 +67,16 @@ async function runApp() {
     CANVAS_WIDTH,
     CANVAS_HEIGHT,
     document.body,
-    styles.board
+    "board"
   );
   console.log("CREATE NEW NETWORK");
   const net = new PolicyNetwork(gameCanvas);
   await buttonInput();
-  net.train();
+
+  const CELL_WIDTH = CANVAS_WIDTH / 5;
+  const CELL_HEIGHT = CANVAS_HEIGHT / 5;
+
+  net.train(0.95, 1000, 500, 1, [CELL_WIDTH * CELL_HEIGHT]);
 }
 
 runApp();

@@ -71,10 +71,6 @@ export const renderPlayer = (player: Player, ctx: CanvasRenderingContext2D) => {
  * @description Reset the environment for a new round.
  * @param p1 - The first player.
  * @param p2 - The second player.
- * @param setP1Direction - Setter: Function to set the direction of player1.
- * @param setP1Coordinates - Setter: Function to set the coordinates of player1.
- * @param setP2Coordinates - Setter: Function to set the coordinates of player2.
- * @param setP2Direction - Setter: Function to set the direction of player2.
  * @param ctx - Canvas Rendering Context of the Game Board.
  */
 export const reset = (
@@ -146,8 +142,6 @@ export const getStateTensor = (ctx: CanvasRenderingContext2D) => {
  * @description Function to initiate the keydownListener for the game Input.
  * @param player1 - The first player.
  * @param player2 - The second player.
- * @param setP1Direction - Setter: Function to set the direction of Player 1.
- * @param setP2Direction - Setter: Function to set the direction of Player 2.
  */
 export const keydownListener = (player1: Player, player2: Player): void => {
   document.addEventListener("keydown", (event) => {
