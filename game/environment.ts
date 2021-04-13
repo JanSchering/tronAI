@@ -64,7 +64,6 @@ export const healthCheckup = (
 export const renderPlayer = (player: Player, ctx: CanvasRenderingContext2D) => {
   ctx.fillStyle = player.getColor();
   const { x, y } = player.getCoordinates();
-  console.log(x, y, player.getColor());
   ctx.fillRect(x, y, 5, 5);
 };
 

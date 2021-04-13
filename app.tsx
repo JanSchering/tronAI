@@ -12,6 +12,7 @@ import "./style/global.scss";
 export const Main: React.FC = React.memo(
   (): React.ReactElement => {
     const [setupResponse, setSetupResponse] = React.useState(null);
+    const [setupDone, setSetupDone] = React.useState(false);
     const [ctx, setCtx] = React.useState(null);
     const [p1Score, setP1Score] = React.useState(0);
     const [p2Score, setP2Score] = React.useState(0);
@@ -41,56 +42,60 @@ export const Main: React.FC = React.memo(
     });
 
     React.useEffect(() => {
-      if (setupResponse && ctx) {
+      if (setupResponse) {
         //process the responses
         player1.setName(setupResponse.p1.name);
         player1.setColor(setupResponse.p1.color);
         player2.setName(setupResponse.p2.name);
         player2.setColor(setupResponse.p2.color);
+        setSetupDone(true);
+      }
+    }, [setupResponse]);
+
+    React.useEffect(() => {
+      if (setupDone && ctx) {
         //Initially render the players
         renderPlayer(player1, ctx);
         renderPlayer(player2, ctx);
         //Start listening to input
         keydownListener(player1, player2);
         //Start the game Loop
-        setInterval(() => {
-          console.log(player1.getDirection());
-          console.log(player1.getCoordinates());
+        const gameLoop = setInterval(() => {
           step(player1, player2, ctx);
           if (!player1.getAlive()) {
+            reset(player1, player2, ctx);
             setP2Score(p2Score + 1);
-            reset(player1, player2, ctx);
+            clearInterval(gameLoop);
           } else if (!player2.getAlive()) {
-            setP1Score(p1Score + 1);
             reset(player1, player2, ctx);
+            setP1Score(p1Score + 1);
+            clearInterval(gameLoop);
           } else {
             renderPlayer(player1, ctx);
             renderPlayer(player2, ctx);
           }
         }, 33);
       }
-    }, [setupResponse]);
+    }, [setupDone, p1Score, p2Score]);
 
-    return React.useMemo(() => {
-      return (
-        <div>
-          {!setupResponse ? (
-            <ScoreBoard
-              p1={{ name: player1.getName(), score: p1Score }}
-              p2={{ name: player2.getName(), score: p2Score }}
-            />
-          ) : (
-            <noscript />
-          )}
-          <Canvas width={1000} height={500} canvasRef={canvasRef} />
-          {!setupResponse ? (
-            <InitialForm doneCallback={setSetupResponse} />
-          ) : (
-            <noscript />
-          )}
-        </div>
-      );
-    }, [setupResponse]);
+    return (
+      <div>
+        {setupResponse ? (
+          <ScoreBoard
+            p1={{ name: player1.getName(), score: p1Score }}
+            p2={{ name: player2.getName(), score: p2Score }}
+          />
+        ) : (
+          <noscript />
+        )}
+        <Canvas width={1000} height={500} canvasRef={canvasRef} />
+        {!setupResponse ? (
+          <InitialForm doneCallback={setSetupResponse} />
+        ) : (
+          <noscript />
+        )}
+      </div>
+    );
   }
 );
 
