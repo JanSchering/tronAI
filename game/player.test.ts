@@ -1,116 +1,122 @@
 import { Player } from "./player";
 import * as Literals from "./literals";
+import { Color, Direction } from "./types";
 
 const STD_NAME = "test";
-const STD_COLOR = "red";
-const STD_X_POS = 20;
-const STD_Y_POS = 30;
-
-/**
- * @param {PlayerConstructor|undefined} vals
- */
-let generateConstructorParams = (vals = {}) => {
-  return {
-    name: vals.name || STD_NAME,
-    color: vals.color || STD_COLOR,
-    x_pos: vals.x_pos || STD_X_POS,
-    y_pos: vals.y_pos || STD_Y_POS,
-    direction: vals.direction,
-    score: vals.score,
-    alive: vals.alive,
-  };
+const STD_COLOR = Color.RED;
+const STD_COORDS = {
+  x: 20,
+  y: 30,
 };
 
 describe("Player Class", () => {
   describe("instantiation", () => {
     it("instantiates properly", () => {
-      const params = generateConstructorParams();
-      const newPlayer = new Player(params);
-      expect(newPlayer.name).toBe(params.name);
-      expect(newPlayer.color).toBe(params.color);
-      expect(newPlayer.x_pos).toBe(params.x_pos);
-      expect(newPlayer.y_pos).toBe(params.y_pos);
+      const newPlayer = new Player({
+        name: STD_NAME,
+        color: STD_COLOR,
+        coordinates: STD_COORDS,
+      });
+      expect(newPlayer.getName()).toBe(STD_NAME);
+      expect(newPlayer.getColor()).toBe(STD_COLOR);
+      expect(newPlayer.getCoordinates()).toBe(STD_COORDS);
       //The constructor should set standard values
       //for the direction, the score and the alive status
-      expect(newPlayer.direction).toBe(Literals.DIRECTIONS.NONE);
-      expect(newPlayer.score).toBe(0);
-      expect(newPlayer.alive).toBe(true);
+      expect(newPlayer.getDirection()).toBe(Direction.NONE);
+      expect(newPlayer.getAlive()).toBe(true);
     });
   });
 
   describe("movePlayer", () => {
     it("Doesn't Move when no direction is set", () => {
-      const params = generateConstructorParams();
-      const newPlayer = new Player(params);
+      const newPlayer = new Player({
+        name: STD_NAME,
+        color: STD_COLOR,
+        coordinates: STD_COORDS,
+      });
       //Confirm initial position
-      expect(newPlayer.x_pos).toBe(params.x_pos);
-      expect(newPlayer.y_pos).toBe(params.y_pos);
+      expect(newPlayer.getCoordinates()).toBe(STD_COORDS);
 
-      newPlayer.movePlayer();
+      newPlayer.move();
 
       //Confirm that the position did not change
-      expect(newPlayer.x_pos).toBe(params.x_pos);
-      expect(newPlayer.y_pos).toBe(params.y_pos);
+      expect(newPlayer.getCoordinates()).toBe(STD_COORDS);
     });
 
     it("Direction == 'LEFT' adjusts the position properly", () => {
-      const params = generateConstructorParams();
-      const newPlayer = new Player(params);
+      const newPlayer = new Player({
+        name: STD_NAME,
+        color: STD_COLOR,
+        coordinates: STD_COORDS,
+      });
       //Confirm initial position
-      expect(newPlayer.x_pos).toBe(params.x_pos);
-      expect(newPlayer.y_pos).toBe(params.y_pos);
+      expect(newPlayer.getCoordinates()).toBe(STD_COORDS);
 
-      newPlayer.setDirection(Literals.DIRECTIONS.LEFT); // Set the direction
-      newPlayer.movePlayer();
+      newPlayer.setDirection(Direction.LEFT); // Set the direction
+      newPlayer.move();
 
-      //Confirm that the position did not change
-      expect(newPlayer.x_pos).toBe(params.x_pos - Literals.PLAYER_WIDTH);
-      expect(newPlayer.y_pos).toBe(params.y_pos);
+      //Confirm that the position changed properly
+      expect(newPlayer.getCoordinates()).toStrictEqual({
+        x: STD_COORDS.x - 5,
+        y: STD_COORDS.y,
+      });
     });
 
     it("Direction == 'RIGHT' adjusts the position properly", () => {
-      const params = generateConstructorParams();
-      const newPlayer = new Player(params);
+      const newPlayer = new Player({
+        name: STD_NAME,
+        color: STD_COLOR,
+        coordinates: STD_COORDS,
+      });
       //Confirm initial position
-      expect(newPlayer.x_pos).toBe(params.x_pos);
-      expect(newPlayer.y_pos).toBe(params.y_pos);
+      expect(newPlayer.getCoordinates()).toBe(STD_COORDS);
 
-      newPlayer.setDirection(Literals.DIRECTIONS.RIGHT); // Set the direction
-      newPlayer.movePlayer();
+      newPlayer.setDirection(Direction.RIGHT); // Set the direction
+      newPlayer.move();
 
-      //Confirm that the position did not change
-      expect(newPlayer.x_pos).toBe(params.x_pos + Literals.PLAYER_WIDTH);
-      expect(newPlayer.y_pos).toBe(params.y_pos);
+      //Confirm that the position changed properly
+      expect(newPlayer.getCoordinates()).toStrictEqual({
+        x: STD_COORDS.x + 5,
+        y: STD_COORDS.y,
+      });
     });
 
     it("Direction == 'UP' adjusts the position properly", () => {
-      const params = generateConstructorParams();
-      const newPlayer = new Player(params);
+      const newPlayer = new Player({
+        name: STD_NAME,
+        color: STD_COLOR,
+        coordinates: STD_COORDS,
+      });
       //Confirm initial position
-      expect(newPlayer.x_pos).toBe(params.x_pos);
-      expect(newPlayer.y_pos).toBe(params.y_pos);
+      expect(newPlayer.getCoordinates()).toBe(STD_COORDS);
 
-      newPlayer.setDirection(Literals.DIRECTIONS.UP); // Set the direction
-      newPlayer.movePlayer();
+      newPlayer.setDirection(Direction.UP); // Set the direction
+      newPlayer.move();
 
       //Confirm that the position did not change
-      expect(newPlayer.x_pos).toBe(params.x_pos);
-      expect(newPlayer.y_pos).toBe(params.y_pos - Literals.PLAYER_HEIGHT);
+      expect(newPlayer.getCoordinates()).toStrictEqual({
+        x: STD_COORDS.x,
+        y: STD_COORDS.y - 5,
+      });
     });
 
     it("Direction == 'DOWN' adjusts the position properly", () => {
-      const params = generateConstructorParams();
-      const newPlayer = new Player(params);
+      const newPlayer = new Player({
+        name: STD_NAME,
+        color: STD_COLOR,
+        coordinates: STD_COORDS,
+      });
       //Confirm initial position
-      expect(newPlayer.x_pos).toBe(params.x_pos);
-      expect(newPlayer.y_pos).toBe(params.y_pos);
+      expect(newPlayer.getCoordinates()).toBe(STD_COORDS);
 
-      newPlayer.setDirection(Literals.DIRECTIONS.DOWN); // Set the direction
-      newPlayer.movePlayer();
+      newPlayer.setDirection(Direction.DOWN); // Set the direction
+      newPlayer.move();
 
       //Confirm that the position did not change
-      expect(newPlayer.x_pos).toBe(params.x_pos);
-      expect(newPlayer.y_pos).toBe(params.y_pos + Literals.PLAYER_HEIGHT);
+      expect(newPlayer.getCoordinates()).toStrictEqual({
+        x: STD_COORDS.x,
+        y: STD_COORDS.y + 5,
+      });
     });
   });
 });
