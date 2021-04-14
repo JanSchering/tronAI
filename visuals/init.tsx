@@ -4,6 +4,9 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Accordion from "react-bootstrap/Accordion";
+import Card from "react-bootstrap/Card";
+import styles from "../style/app.module.scss";
 
 export const InitialForm = ({
   doneCallback,
@@ -62,10 +65,23 @@ export const InitialForm = ({
           <ColorPicker color={colorP1} callBack={setColorP2} />
         </Col>
       </Row>
-      <Row>
-        <Col>AI Setup Form Here:</Col>
+      <Row className={styles.top_buffer}>
+        <Col xs={4}>
+          <Accordion>
+            <Card bg="dark" text="light">
+              <Card.Header>
+                <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                  AI Setup
+                </Accordion.Toggle>
+              </Card.Header>
+              <Accordion.Collapse eventKey="0">
+                <Card.Body>Hello! I'm the body</Card.Body>
+              </Accordion.Collapse>
+            </Card>
+          </Accordion>
+        </Col>
       </Row>
-      <Row bsPrefix="mt-2">
+      <Row className={styles.top_buffer}>
         <Col>
           <Button onClick={handleDone}>Done</Button>
         </Col>
