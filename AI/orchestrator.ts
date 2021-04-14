@@ -1,4 +1,4 @@
-import { Player } from "../game/player.js";
+import { Player } from "../game/player";
 import {
   CANVAS_HEIGHT,
   CANVAS_WIDTH,
@@ -10,7 +10,6 @@ import { Memory } from "./memory";
 import { Color } from "../game/types";
 import { getStateTensor, step, reset, renderPlayer } from "../game/environment";
 import * as tf from "@tensorflow/tfjs";
-import { Rank } from "@tensorflow/tfjs";
 
 const MIN_EPSILON = 0.01;
 const MAX_EPSILON = 0.2;
@@ -55,7 +54,7 @@ export class Orchestrator {
       color: Color.BLUE,
       coordinates: {
         x: X_START,
-        y: Y_START,
+        y: Y_START * 2,
       },
     });
     this.memory = memory;
@@ -135,7 +134,7 @@ export class Orchestrator {
         renderPlayer(this.player2, ctx);
       }
     }, 33);
-    await this.replay;
+    await this.replay();
   }
 
   async replay() {

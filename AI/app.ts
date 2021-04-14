@@ -1,7 +1,7 @@
 import { Model } from "./model";
 import { Orchestrator } from "./orchestrator";
 import { Memory } from "./memory";
-import { createCanvas } from "./visual.js";
+import { createCanvas } from "./visual";
 import * as Literals from "../game/literals";
 import "../style/global.scss";
 import * as tf from "@tensorflow/tfjs";

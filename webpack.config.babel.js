@@ -98,9 +98,19 @@ var config = {
   ],
 };
 
-var tronAIConfig = Object.assign({}, config, {
+var tronGameConfig = Object.assign({}, config, {
   entry: {
     index: path.resolve(__dirname, "app.tsx"),
+  },
+  output: {
+    path: path.resolve(__dirname, "dist"),
+    filename: "bundle.js",
+  },
+});
+
+var tronAIConfig = Object.assign({}, config, {
+  entry: {
+    index: path.resolve(__dirname, "AI", "app.ts"),
   },
   output: {
     path: path.resolve(__dirname, "dist"),
