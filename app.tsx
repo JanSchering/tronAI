@@ -3,11 +3,12 @@ import { render } from "react-dom";
 import { Player } from "./game/player";
 import { Color, Direction } from "./game/types";
 import { X_START, Y_START } from "./game/literals";
-import { Canvas, useCanvas } from "./game/canvas";
-import { InitialForm } from "./game/init";
+import { Canvas, useCanvas } from "./visuals/canvas";
+import { InitialForm } from "./visuals/init";
 import { step, renderPlayer, reset, keydownListener } from "./game/environment";
-import { ScoreBoard } from "./game/scoreBoard";
+import { ScoreBoard } from "./visuals/scoreBoard";
 import "./style/global.scss";
+import Container from "react-bootstrap/Container";
 
 export const Main: React.FC = React.memo(
   (): React.ReactElement => {
@@ -79,7 +80,7 @@ export const Main: React.FC = React.memo(
     }, [setupDone, p1Score, p2Score]);
 
     return (
-      <div>
+      <Container>
         {setupResponse ? (
           <ScoreBoard
             p1={{ name: player1.getName(), score: p1Score }}
@@ -94,7 +95,7 @@ export const Main: React.FC = React.memo(
         ) : (
           <noscript />
         )}
-      </div>
+      </Container>
     );
   }
 );

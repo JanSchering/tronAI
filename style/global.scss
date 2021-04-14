@@ -1,10 +1,8 @@
+@import "~bootstrap/scss/bootstrap";
+
 .board {
   border: 1px solid white;
   position: fixed;
-}
-
-.player {
-  display: flex;
 }
 
 body {
@@ -16,7 +14,8 @@ body {
   width: 100px;
   height: 25px;
   display: flex;
-  flex-direction: row;
+  position: absolute;
+  top: 50%;
 }
 
 .pickerChoice {
@@ -43,12 +42,4 @@ body {
 }
 .red {
   background-color: #ff0000;
-}
-
-.setup {
-  position: absolute;
-  height: 200px;
-  width: 300px;
-  left: 350px;
-  top: 150px;
 }

@@ -118,4 +118,4 @@ var tronAIConfig = Object.assign({}, config, {
   },
 });
 
-module.exports = [tronAIConfig];
+module.exports = [tronGameConfig];

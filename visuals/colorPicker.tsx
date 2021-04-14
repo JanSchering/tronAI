@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Color } from "./types";
+import { Color } from "../game/types";
 
 export const ColorPicker = ({ color, callBack }: Props): React.ReactElement => {
   const [currentColor, setCurrentColor] = React.useState(color);
