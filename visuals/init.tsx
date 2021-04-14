@@ -16,6 +16,7 @@ export const InitialForm = ({
   const [colorP2, setColorP2] = React.useState(null);
   const [nameP1, setNameP1] = React.useState("");
   const [nameP2, setNameP2] = React.useState("");
+  const [aiSetupToggled, setAiSetupToggled] = React.useState(false);
 
   React.useEffect(() => {}, []);
   const handleDone = () => {
@@ -70,8 +71,13 @@ export const InitialForm = ({
           <Accordion>
             <Card bg="dark" text="light">
               <Card.Header>
-                <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                  AI Setup
+                <Accordion.Toggle
+                  as={Button}
+                  variant="link"
+                  eventKey="0"
+                  onClick={() => setAiSetupToggled(!aiSetupToggled)}
+                >
+                  AI Setup {aiSetupToggled ? "▼" : "►"}
                 </Accordion.Toggle>
               </Card.Header>
               <Accordion.Collapse eventKey="0">
