@@ -40,7 +40,7 @@ export const Main: React.FC = React.memo(
 
     const canvasRef = useCanvas(([canvas, ctx]) => {
       setCtx(ctx);
-    });
+    }, setupResponse);
 
     React.useEffect(() => {
       if (setupResponse) {
@@ -79,22 +79,17 @@ export const Main: React.FC = React.memo(
       }
     }, [setupDone, p1Score, p2Score]);
 
-    return (
+    return setupResponse ? (
       <Container>
-        {setupResponse ? (
-          <ScoreBoard
-            p1={{ name: player1.getName(), score: p1Score }}
-            p2={{ name: player2.getName(), score: p2Score }}
-          />
-        ) : (
-          <noscript />
-        )}
+        <ScoreBoard
+          p1={{ name: player1.getName(), score: p1Score }}
+          p2={{ name: player2.getName(), score: p2Score }}
+        />
         <Canvas width={1000} height={500} canvasRef={canvasRef} />
-        {!setupResponse ? (
-          <InitialForm doneCallback={setSetupResponse} />
-        ) : (
-          <noscript />
-        )}
+      </Container>
+    ) : (
+      <Container>
+        <InitialForm doneCallback={setSetupResponse} />
       </Container>
     );
   }

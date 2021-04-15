@@ -4,15 +4,19 @@ export const useCanvas = (
   callback: ([canvas, ctx]: [
     HTMLCanvasElement,
     CanvasRenderingContext2D
-  ]) => any
+  ]) => any,
+  dependency: any
 ): React.RefObject<HTMLCanvasElement> => {
   const canvasRef = React.useRef(null);
 
   React.useEffect(() => {
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
+    let ctx = undefined;
+    if (canvas) {
+      ctx = canvas.getContext("2d");
+    }
     callback([canvas, ctx]);
-  }, []);
+  }, [dependency]);
 
   return canvasRef;
 };

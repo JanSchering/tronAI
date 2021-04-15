@@ -6,8 +6,11 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
+import Container from "react-bootstrap/Container";
+
 import styles from "../style/app.module.scss";
 import { AISetup } from "./aiSetup";
+import { PlayerSetup } from "./playerSetup";
 
 export const InitialForm = ({
   doneCallback,
@@ -18,6 +21,7 @@ export const InitialForm = ({
   const [nameP1, setNameP1] = React.useState("");
   const [nameP2, setNameP2] = React.useState("");
   const [aiSetupToggled, setAiSetupToggled] = React.useState(false);
+  const [playerSetupToggled, setPlayerSetupToggled] = React.useState(true);
   const [aiEnabled, setAiEnabled] = React.useState(false);
 
   React.useEffect(() => {}, []);
@@ -35,59 +39,64 @@ export const InitialForm = ({
   };
 
   return (
-    <Form>
+    <Container>
       <Row>
-        <Col xs={4}>
-          <Form.Label>Name</Form.Label>
-          <Form.Control
-            size="xs"
-            type="text"
-            placeholder="Large text"
-            onBlur={(evt: React.ChangeEvent<HTMLInputElement>) =>
-              setNameP1(evt.target.value)
-            }
-          />
-        </Col>
-        <Col xs={4}>
-          <ColorPicker color={colorP1} callBack={setColorP1} />
-        </Col>
-      </Row>
-      <Row>
-        <Col xs={4}>
-          <Form.Label>Name</Form.Label>
-          <Form.Control
-            size="xs"
-            type="text"
-            placeholder="Large text"
-            onBlur={(evt: React.ChangeEvent<HTMLInputElement>) =>
-              setNameP2(evt.target.value)
-            }
-          />
-        </Col>
-        <Col xs={4}>
-          <ColorPicker color={colorP1} callBack={setColorP2} />
-        </Col>
-      </Row>
-      <Row className={styles.top_buffer}>
-        <Col xs={4}>
-          <Accordion>
+        <Col>
+          <Accordion defaultActiveKey="0">
             <Card bg="dark" text="light">
               <Card.Header>
                 <Row>
                   <Col xs={5}>
                     <Form.Check
-                      type={"checkbox"}
+                      type={"radio"}
                       id={`ai-checkbox`}
                       label={`Enable AI`}
-                      onClick={() => setAiEnabled(!aiEnabled)}
                       className={styles.vert_20}
+                      checked={!aiEnabled}
+                      onChange={() => setAiEnabled(false)}
+                    />
+                  </Col>
+                  <Col xs={5}>
+                    <Accordion.Toggle
+                      as={Button}
+                      variant={!aiEnabled ? "primary" : "secondary"}
+                      eventKey="0"
+                      onClick={() => setPlayerSetupToggled(!playerSetupToggled)}
+                    >
+                      Player Setup {playerSetupToggled ? "▼" : "►"}
+                    </Accordion.Toggle>
+                  </Col>
+                </Row>
+              </Card.Header>
+              <Accordion.Collapse eventKey="0">
+                <PlayerSetup
+                  colorP1={colorP1}
+                  colorP2={colorP2}
+                  setColorP1={setColorP1}
+                  setColorP2={setColorP2}
+                  setNameP1={setNameP1}
+                  setNameP2={setNameP2}
+                />
+              </Accordion.Collapse>
+            </Card>
+            <Card bg="dark" text="light">
+              <Card.Header>
+                <Row>
+                  <Col xs={5}>
+                    <Form.Check
+                      type={"radio"}
+                      id={`ai-checkbox`}
+                      label={`Enable AI`}
+                      className={styles.vert_20}
+                      checked={aiEnabled}
+                      onChange={() => setAiEnabled(true)}
                     />
                   </Col>
                   <Col xs={5}>
                     <Accordion.Toggle
                       as={Button}
                       variant={aiEnabled ? "primary" : "secondary"}
-                      eventKey="0"
+                      eventKey="1"
                       onClick={() => setAiSetupToggled(!aiSetupToggled)}
                     >
                       AI Setup {aiSetupToggled ? "▼" : "►"}
@@ -95,7 +104,7 @@ export const InitialForm = ({
                   </Col>
                 </Row>
               </Card.Header>
-              <Accordion.Collapse eventKey="0">
+              <Accordion.Collapse eventKey="1">
                 <AISetup />
               </Accordion.Collapse>
             </Card>
@@ -108,7 +117,7 @@ export const InitialForm = ({
         </Col>
       </Row>
       {children}
-    </Form>
+    </Container>
   );
 };
 
