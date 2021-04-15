@@ -8,6 +8,7 @@ import { InitialForm } from "./visuals/init";
 import { step, renderPlayer, reset, keydownListener } from "./game/environment";
 import { ScoreBoard } from "./visuals/scoreBoard";
 import "./style/global.scss";
+import styles from "./style/app.module.scss";
 import Container from "react-bootstrap/Container";
 
 export const Main: React.FC = React.memo(
@@ -88,7 +89,7 @@ export const Main: React.FC = React.memo(
         <Canvas width={1000} height={500} canvasRef={canvasRef} />
       </Container>
     ) : (
-      <Container>
+      <Container className={styles.app_container}>
         <InitialForm doneCallback={setSetupResponse} />
       </Container>
     );
