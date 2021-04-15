@@ -195,3 +195,20 @@ export const keydownListener = (player1: Player, player2: Player): void => {
     }
   });
 };
+
+/**
+ * @description Calculates the reward to give a player based on his status, the current step
+ * and a parameter to control the logarithmic reward curve.
+ * Assumes the steps are counted from 0.
+ * @param player - The player to calculate the reward for.
+ * @param currentStep - The number of the current step of the game.
+ * @param logRewardParam - Controls the logarithmic reward curve.
+ * @returns The reward for a player.
+ */
+const calculateReward = (
+  player: Player,
+  currentStep: number,
+  logRewardParam: number
+): number => {
+  return player.getAlive() ? logRewardParam * Math.log(currentStep + 1) : -1000;
+};

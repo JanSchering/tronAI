@@ -9,6 +9,10 @@ import {
   NUM_OUTPUTS,
 } from "./model_constants";
 
+/**
+ * @description Creates a tensorflow model.
+ * @returns A tensorflow neural network.
+ */
 const createModel = (): tf.Sequential => {
   const model = tf.sequential();
 
