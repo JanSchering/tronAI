@@ -4,6 +4,7 @@ import { X_START, Y_START, CANVAS_WIDTH, CANVAS_HEIGHT } from "./literals";
 import { Player } from "./player";
 import { Coordinate, Direction, Color } from "./types";
 import { getColorCode } from "./utils";
+import { neonSquare } from "./utils";
 
 /**
  * @description Take a single time step in the game.
