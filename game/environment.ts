@@ -2,7 +2,7 @@ import * as React from "react";
 import * as tf from "@tensorflow/tfjs";
 import { X_START, Y_START, CANVAS_WIDTH, CANVAS_HEIGHT } from "./literals";
 import { Player } from "./player";
-import { Coordinate, Direction, Color } from "./types";
+import { Direction, Color } from "./types";
 import { getColorCode } from "./utils";
 import { neonSquare } from "./utils";
 
@@ -62,7 +62,10 @@ export const healthCheckup = (
  * @param player - The player that we want to render.
  * @param ctx - The Rendering Context of the Canvas.
  */
-export const renderPlayer = (player: Player, ctx: CanvasRenderingContext2D) => {
+export const renderPlayer = (
+  player: Player,
+  ctx: CanvasRenderingContext2D
+): void => {
   ctx.fillStyle = player.getColor();
   const { x, y } = player.getCoordinates();
   ctx.fillRect(x, y, 5, 5);
@@ -78,7 +81,7 @@ export const reset = (
   p1: Player,
   p2: Player,
   ctx: CanvasRenderingContext2D
-) => {
+): void => {
   // Reset the directions of the players
   p1.setDirection(Direction.NONE);
   p2.setDirection(Direction.NONE);
@@ -98,7 +101,7 @@ export const reset = (
  * @param ctx - The Canvas Rendering Context of the Game board.
  * @returns
  */
-export const getStateTensor = (ctx: CanvasRenderingContext2D) => {
+export const getStateTensor = (ctx: CanvasRenderingContext2D): tf.Tensor1D => {
   //TODO: The Tensor is currently only using the canvas information. Need to also append the current coordinates
   // and the current direction of the player to the Tensor. Those are super important.
   return tf.tidy(() => {

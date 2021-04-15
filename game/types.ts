@@ -17,3 +17,15 @@ export type Coordinate = {
   x: number;
   y: number;
 };
+
+export type GridMetaData = {
+  numRows: number;
+  numCols: number;
+  playerWidth: number;
+  playerHeight: number;
+};
+
+export type GridCell = {
+  colIdx: number;
+  rowIdx: number;
+};

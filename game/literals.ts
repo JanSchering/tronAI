@@ -9,6 +9,27 @@ const CANVAS_HEIGHT = 500;
 const PLAYER_WIDTH = 5;
 const PLAYER_HEIGHT = 5;
 
+const RGB_RED = {
+  r: 243,
+  g: 20,
+  b: 21,
+};
+const RGB_GREEN = {
+  r: 20,
+  g: 243,
+  b: 20,
+};
+const RGB_BLUE = {
+  r: 20,
+  g: 20,
+  b: 243,
+};
+const RGB_YELLOW = {
+  r: 230,
+  g: 240,
+  b: 20,
+};
+
 export {
   X_START,
   Y_START,
@@ -16,4 +37,8 @@ export {
   CANVAS_WIDTH,
   PLAYER_WIDTH,
   PLAYER_HEIGHT,
+  RGB_RED,
+  RGB_GREEN,
+  RGB_BLUE,
+  RGB_YELLOW,
 };
