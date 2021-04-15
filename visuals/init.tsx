@@ -7,6 +7,7 @@ import Col from "react-bootstrap/Col";
 import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
 import styles from "../style/app.module.scss";
+import { AISetup } from "./aiSetup";
 
 export const InitialForm = ({
   doneCallback,
@@ -17,6 +18,7 @@ export const InitialForm = ({
   const [nameP1, setNameP1] = React.useState("");
   const [nameP2, setNameP2] = React.useState("");
   const [aiSetupToggled, setAiSetupToggled] = React.useState(false);
+  const [aiEnabled, setAiEnabled] = React.useState(false);
 
   React.useEffect(() => {}, []);
   const handleDone = () => {
@@ -71,17 +73,30 @@ export const InitialForm = ({
           <Accordion>
             <Card bg="dark" text="light">
               <Card.Header>
-                <Accordion.Toggle
-                  as={Button}
-                  variant="link"
-                  eventKey="0"
-                  onClick={() => setAiSetupToggled(!aiSetupToggled)}
-                >
-                  AI Setup {aiSetupToggled ? "▼" : "►"}
-                </Accordion.Toggle>
+                <Row>
+                  <Col xs={5}>
+                    <Form.Check
+                      type={"checkbox"}
+                      id={`ai-checkbox`}
+                      label={`Enable AI`}
+                      onClick={() => setAiEnabled(!aiEnabled)}
+                      className={styles.vert_20}
+                    />
+                  </Col>
+                  <Col xs={5}>
+                    <Accordion.Toggle
+                      as={Button}
+                      variant={aiEnabled ? "primary" : "secondary"}
+                      eventKey="0"
+                      onClick={() => setAiSetupToggled(!aiSetupToggled)}
+                    >
+                      AI Setup {aiSetupToggled ? "▼" : "►"}
+                    </Accordion.Toggle>
+                  </Col>
+                </Row>
               </Card.Header>
               <Accordion.Collapse eventKey="0">
-                <Card.Body>Hello! I'm the body</Card.Body>
+                <AISetup />
               </Accordion.Collapse>
             </Card>
           </Accordion>
