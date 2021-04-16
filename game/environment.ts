@@ -1,10 +1,15 @@
 import * as React from "react";
 import * as tf from "@tensorflow/tfjs";
-import { X_START, Y_START, CANVAS_WIDTH, CANVAS_HEIGHT } from "./literals";
+import {
+  X_START,
+  Y_START,
+  CANVAS_WIDTH,
+  CANVAS_HEIGHT,
+  NEON_COLORS,
+} from "./literals";
 import { Player } from "./player";
-import { Direction, Color } from "./types";
-import { getColorCode } from "./utils";
-import { neonSquare } from "./utils";
+import { Direction, Color, Standard_Color, Neon_Color } from "./types";
+import { getColorCode, neonSquare } from "./utils";
 
 /**
  * @description Take a single time step in the game.
@@ -66,9 +71,14 @@ export const renderPlayer = (
   player: Player,
   ctx: CanvasRenderingContext2D
 ): void => {
-  ctx.fillStyle = player.getColor();
-  const { x, y } = player.getCoordinates();
-  ctx.fillRect(x, y, 5, 5);
+  const color = player.getColor();
+  if (!isNeon(color)) {
+    ctx.fillStyle = color;
+    const { x, y } = player.getCoordinates();
+    ctx.fillRect(x, y, 5, 5);
+  } else {
+    //TODO: Neon Color implementation here
+  }
 };
 
 /**
@@ -215,4 +225,13 @@ const calculateReward = (
   logRewardParam: number
 ): number => {
   return player.getAlive() ? logRewardParam * Math.log(currentStep + 1) : -1000;
+};
+
+/**
+ * @description checks if a Color object is part of the subtype NeonColor
+ * @param color - The color to check.
+ * @returns
+ */
+export const isNeon = (color: any): color is Neon_Color => {
+  return NEON_COLORS.includes(color);
 };

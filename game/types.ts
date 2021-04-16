@@ -1,13 +1,17 @@
-export enum Color {
+export type Color = Standard_Color | Neon_Color;
+
+export enum Standard_Color {
   RED = "#ff0000",
   GREEN = "#33cc33",
   BLUE = "#0066ff",
   YELLOW = "#ffff00",
-  NEON_RED = "neon_red",
-  NEON_BLUE = "neon_blue",
-  NEON_GREEN = "neon_green",
-  NEON_YELLOW = "neon_yellow",
 }
+
+export type Neon_Color = {
+  r: number;
+  g: number;
+  b: number;
+};
 
 export enum Direction {
   UP = 0,

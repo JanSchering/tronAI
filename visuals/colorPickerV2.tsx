@@ -1,14 +1,19 @@
 import * as React from "react";
-import Col from "react-bootstrap/esm/Col";
-import Row from "react-bootstrap/esm/Row";
-import { Color } from "../game/types";
-import Neon_Blue from "./images/neon_blue.png";
-import Neon_Red from "./images/neon_red.png";
-import Neon_Green from "./images/neon_green.png";
-import Neon_Yellow from "./images/neon_yellow.png";
 import Image from "react-bootstrap/Image";
 import Card from "react-bootstrap/Card";
 import styles from "../style/app.module.scss";
+
+import { Color, Standard_Color } from "../game/types";
+import { NEON_RED, NEON_BLUE, NEON_GREEN, NEON_YELLOW } from "../game/literals";
+
+import Neon_Blue_Img from "./images/neon_blue.png";
+import Neon_Red_Img from "./images/neon_red.png";
+import Neon_Green_Img from "./images/neon_green.png";
+import Neon_Yellow_Img from "./images/neon_yellow.png";
+import Std_Blue_Img from "./images/standard_blue.jpeg";
+import Std_Red_Img from "./images/standard_red.jpg";
+import Std_Green_Img from "./images/standard_green.jpeg";
+import Std_Yellow_Img from "./images/standard_yellow.jpeg";
 
 export const ColorPickerV2 = ({
   color,
@@ -23,48 +28,77 @@ export const ColorPickerV2 = ({
     }
   };
 
+  const colorCardBody = (entries: ColorCardEntry[]) => (
+    <Card.Body>
+      {entries.map((entry) => (
+        <Image
+          src={entry.src}
+          style={{ width: "4rem" }}
+          className={styles.sep_xs}
+          onClick={entry.clickCallback}
+        />
+      ))}
+    </Card.Body>
+  );
+
+  const NeonCardBody = colorCardBody([
+    {
+      src: Neon_Blue_Img,
+      clickCallback: () => clickHandler(NEON_BLUE),
+    },
+    {
+      src: Neon_Red_Img,
+      clickCallback: () => clickHandler(NEON_RED),
+    },
+    {
+      src: Neon_Green_Img,
+      clickCallback: () => clickHandler(NEON_GREEN),
+    },
+    {
+      src: Neon_Yellow_Img,
+      clickCallback: () => clickHandler(NEON_YELLOW),
+    },
+  ]);
+
+  const StdCardBody = colorCardBody([
+    {
+      src: Std_Blue_Img,
+      clickCallback: () => clickHandler(Standard_Color.BLUE),
+    },
+    {
+      src: Std_Red_Img,
+      clickCallback: () => clickHandler(Standard_Color.RED),
+    },
+    {
+      src: Std_Green_Img,
+      clickCallback: () => clickHandler(Standard_Color.GREEN),
+    },
+    {
+      src: Std_Yellow_Img,
+      clickCallback: () => clickHandler(Standard_Color.YELLOW),
+    },
+  ]);
+
   return (
-    <Card style={{ width: "12rem" }} bg="secondary">
-      <Card.Header>Neon Colors:</Card.Header>
-      <Card.Body>
-        <Image
-          src={Neon_Blue}
-          style={{ width: "4rem" }}
-          className={styles.sep_xs}
-          onClick={() => {
-            clickHandler(Color.NEON_BLUE);
-          }}
-        />
-        <Image
-          src={Neon_Red}
-          style={{ width: "4rem" }}
-          className={styles.sep_xs}
-          onClick={() => {
-            clickHandler(Color.NEON_RED);
-          }}
-        />
-        <Image
-          src={Neon_Green}
-          style={{ width: "4rem" }}
-          className={styles.sep_xs}
-          onClick={() => {
-            clickHandler(Color.NEON_GREEN);
-          }}
-        />
-        <Image
-          src={Neon_Yellow}
-          style={{ width: "4rem" }}
-          className={styles.sep_xs}
-          onClick={() => {
-            clickHandler(Color.NEON_YELLOW);
-          }}
-        />
-      </Card.Body>
-    </Card>
+    <React.Fragment>
+      <Card style={{ width: "12rem" }} bg="secondary">
+        <Card.Header>Neon Colors:</Card.Header>
+        {NeonCardBody}
+      </Card>
+      <Card style={{ width: "12rem" }} bg="secondary">
+        <Card.Header>Standard Colors:</Card.Header>
+        {StdCardBody}
+      </Card>
+    </React.Fragment>
   );
 };
 
 type Props = {
   color: Color;
   callBack?: Function;
+};
+
+type ColorCardEntry = {
+  src: any;
+  clickCallback: (color: Color) => void;
 };

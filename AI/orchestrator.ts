@@ -7,7 +7,7 @@ import {
 } from "../game/literals";
 import { Model } from "./model";
 import { Memory } from "./memory";
-import { Color } from "../game/types";
+import { Standard_Color } from "../game/types";
 import { getStateTensor, step, reset, renderPlayer } from "../game/environment";
 import * as tf from "@tensorflow/tfjs";
 
@@ -43,7 +43,7 @@ export class Orchestrator {
     this.canvas = canvas;
     this.player1 = new Player({
       name: "p1",
-      color: Color.RED,
+      color: Standard_Color.RED,
       coordinates: {
         x: X_START,
         y: Y_START,
@@ -51,7 +51,7 @@ export class Orchestrator {
     });
     this.player2 = new Player({
       name: "p2",
-      color: Color.BLUE,
+      color: Standard_Color.BLUE,
       coordinates: {
         x: X_START,
         y: Y_START * 2,

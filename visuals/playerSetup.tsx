@@ -9,12 +9,18 @@ import Image from "react-bootstrap/Image";
 
 import { ColorPicker } from "./colorPicker";
 import { ColorPickerV2 } from "./colorPickerV2";
-import { Color } from "../game/types";
+import { Color, Standard_Color } from "../game/types";
+import { NEON_RED, NEON_BLUE, NEON_GREEN, NEON_YELLOW } from "../game/literals";
+import { isNeon } from "../game/environment";
 
-import Neon_Red from "./images/neon_red.png";
-import Neon_Blue from "./images/neon_blue.png";
-import Neon_Green from "./images/neon_green.png";
-import Neon_Yellow from "./images/neon_yellow.png";
+import Neon_Red_Img from "./images/neon_red.png";
+import Neon_Blue_Img from "./images/neon_blue.png";
+import Neon_Green_Img from "./images/neon_green.png";
+import Neon_Yellow_Img from "./images/neon_yellow.png";
+import Std_Blue_Img from "./images/standard_blue.jpeg";
+import Std_Red_Img from "./images/standard_red.jpg";
+import Std_Green_Img from "./images/standard_green.jpeg";
+import Std_Yellow_Img from "./images/standard_yellow.jpeg";
 import styles from "../style/app.module.scss";
 
 export const PlayerSetup: React.FC<Props> = (
@@ -148,14 +154,22 @@ type Props = {
  */
 const getImageForColor = (color: Color) => {
   switch (color) {
-    case Color.NEON_RED:
-      return Neon_Red;
-    case Color.NEON_BLUE:
-      return Neon_Blue;
-    case Color.NEON_GREEN:
-      return Neon_Green;
-    case Color.NEON_YELLOW:
-      return Neon_Yellow;
+    case NEON_RED:
+      return Neon_Red_Img;
+    case NEON_BLUE:
+      return Neon_Blue_Img;
+    case NEON_GREEN:
+      return Neon_Green_Img;
+    case NEON_YELLOW:
+      return Neon_Yellow_Img;
+    case Standard_Color.RED:
+      return Std_Red_Img;
+    case Standard_Color.BLUE:
+      return Std_Blue_Img;
+    case Standard_Color.GREEN:
+      return Std_Green_Img;
+    case Standard_Color.YELLOW:
+      return Std_Yellow_Img;
     default:
       return;
   }

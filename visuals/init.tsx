@@ -11,13 +11,20 @@ import styles from "../style/app.module.scss";
 import { AISetup } from "./aiSetup";
 import { PlayerSetup } from "./playerSetup";
 import { Color } from "../game/types";
+import { NEON_RED, NEON_BLUE } from "../game/literals";
 
 export const InitialForm = ({
   doneCallback,
   children,
 }: Props): React.ReactElement => {
-  const [colorP1, setColorP1] = React.useState(Color.NEON_RED);
-  const [colorP2, setColorP2] = React.useState(Color.NEON_BLUE);
+  const [colorP1, setColorP1]: [
+    Color,
+    React.Dispatch<React.SetStateAction<Color>>
+  ] = React.useState(NEON_RED);
+  const [colorP2, setColorP2]: [
+    Color,
+    React.Dispatch<React.SetStateAction<Color>>
+  ] = React.useState(NEON_BLUE);
   const [nameP1, setNameP1] = React.useState("");
   const [nameP2, setNameP2] = React.useState("");
   const [aiSetupToggled, setAiSetupToggled] = React.useState(false);

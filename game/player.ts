@@ -11,7 +11,7 @@ export type PlayerProps = {
 };
 
 export class Player {
-  private color: Color = Color.BLUE;
+  private color: Color;
   private coordinates: Coordinate;
   private name: string;
   private direction: Direction;

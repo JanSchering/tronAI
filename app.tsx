@@ -1,7 +1,7 @@
 import * as React from "react";
 import { render } from "react-dom";
 import { Player } from "./game/player";
-import { Color, Direction } from "./game/types";
+import { Color, Direction, Standard_Color } from "./game/types";
 import { X_START, Y_START } from "./game/literals";
 import { Canvas, useCanvas } from "./visuals/canvas";
 import { InitialForm } from "./visuals/init";
@@ -21,7 +21,7 @@ export const Main: React.FC = React.memo(
     const [player1] = React.useState(
       new Player({
         name: "",
-        color: Color.RED,
+        color: Standard_Color.RED,
         coordinates: {
           x: X_START,
           y: Y_START,
@@ -31,7 +31,7 @@ export const Main: React.FC = React.memo(
     const [player2] = React.useState(
       new Player({
         name: "",
-        color: Color.BLUE,
+        color: Standard_Color.BLUE,
         coordinates: {
           x: X_START,
           y: Y_START * 2,

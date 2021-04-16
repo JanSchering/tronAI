@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Color } from "../game/types";
+import { Color, Standard_Color } from "../game/types";
 
 export const ColorPicker = ({ color, callBack }: Props): React.ReactElement => {
   const [currentColor, setCurrentColor] = React.useState(color);
@@ -15,27 +15,27 @@ export const ColorPicker = ({ color, callBack }: Props): React.ReactElement => {
     <div className="colorPicker">
       <div
         className={`pickerChoice blue ${
-          currentColor === Color.BLUE ? "picked" : ""
+          currentColor === Standard_Color.BLUE ? "picked" : ""
         }`}
-        onClick={() => clickHandler(Color.BLUE)}
+        onClick={() => clickHandler(Standard_Color.BLUE)}
       ></div>
       <div
         className={`pickerChoice red ${
-          currentColor === Color.RED ? "picked" : ""
+          currentColor === Standard_Color.RED ? "picked" : ""
         }`}
-        onClick={() => clickHandler(Color.RED)}
+        onClick={() => clickHandler(Standard_Color.RED)}
       ></div>
       <div
         className={`pickerChoice green ${
-          currentColor === Color.GREEN ? "picked" : ""
+          currentColor === Standard_Color.GREEN ? "picked" : ""
         }`}
-        onClick={() => clickHandler(Color.GREEN)}
+        onClick={() => clickHandler(Standard_Color.GREEN)}
       ></div>
       <div
         className={`pickerChoice yellow ${
-          currentColor === Color.YELLOW ? "picked" : ""
+          currentColor === Standard_Color.YELLOW ? "picked" : ""
         }`}
-        onClick={() => clickHandler(Color.YELLOW)}
+        onClick={() => clickHandler(Standard_Color.YELLOW)}
       ></div>
     </div>
   );
