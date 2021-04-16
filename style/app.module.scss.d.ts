@@ -4,6 +4,9 @@ interface CssExports {
   'app_container': string;
   'center_col': string;
   'center_relative': string;
+  'init_btn_center': string;
+  'no_padding': string;
+  'sep_xs': string;
   'top_buffer': string;
   'vert_20': string;
 }
