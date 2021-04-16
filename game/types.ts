@@ -3,10 +3,10 @@ export enum Color {
   GREEN = "#33cc33",
   BLUE = "#0066ff",
   YELLOW = "#ffff00",
-  NEON_RED = "",
-  NEON_BLUE = "",
-  NEON_GREEN = "",
-  NEON_YELLOW = "",
+  NEON_RED = "neon_red",
+  NEON_BLUE = "neon_blue",
+  NEON_GREEN = "neon_green",
+  NEON_YELLOW = "neon_yellow",
 }
 
 export enum Direction {

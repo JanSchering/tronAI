@@ -5,9 +5,16 @@ import Col from "react-bootstrap/Col";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Button from "react-bootstrap/Button";
 import Popover from "react-bootstrap/Popover";
+import Image from "react-bootstrap/Image";
+
 import { ColorPicker } from "./colorPicker";
 import { ColorPickerV2 } from "./colorPickerV2";
 import { Color } from "../game/types";
+
+import Neon_Red from "./images/neon_red.png";
+import Neon_Blue from "./images/neon_blue.png";
+import Neon_Green from "./images/neon_green.png";
+import Neon_Yellow from "./images/neon_yellow.png";
 import styles from "../style/app.module.scss";
 
 export const PlayerSetup: React.FC<Props> = (
@@ -48,7 +55,7 @@ export const PlayerSetup: React.FC<Props> = (
         </Row>
       </Popover.Title>
       <Popover.Content className={styles.no_padding}>
-        <ColorPickerV2 color={colorP1} callBack={setColorP1} />
+        <ColorPickerV2 color={color} callBack={callBack} />
       </Popover.Content>
     </Popover>
   );
@@ -69,6 +76,10 @@ export const PlayerSetup: React.FC<Props> = (
               setNameP1(evt.target.value)
             }
           />
+        </Col>
+        <Col xs={4}>
+          <Form.Label>Color</Form.Label>
+          <Image src={getImageForColor(colorP1)} />
         </Col>
         <Col xs={4}>
           <OverlayTrigger
@@ -119,4 +130,23 @@ type Props = {
   setColorP2: (color: Color) => void;
   setNameP1: (name: string) => void;
   setNameP2: (name: string) => void;
+};
+
+/**
+ * @description Returns an image for the given color.
+ * @param color - The color to get the image for.
+ */
+const getImageForColor = (color: Color) => {
+  switch (color) {
+    case Color.NEON_RED:
+      return Neon_Red;
+    case Color.NEON_BLUE:
+      return Neon_Blue;
+    case Color.NEON_GREEN:
+      return Neon_Green;
+    case Color.NEON_YELLOW:
+      return Neon_Yellow;
+    default:
+      return;
+  }
 };
