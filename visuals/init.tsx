@@ -10,13 +10,14 @@ import IntroImg from "./images/tronImage_polished.jpeg";
 import styles from "../style/app.module.scss";
 import { AISetup } from "./aiSetup";
 import { PlayerSetup } from "./playerSetup";
+import { Color } from "../game/types";
 
 export const InitialForm = ({
   doneCallback,
   children,
 }: Props): React.ReactElement => {
-  const [colorP1, setColorP1] = React.useState(null);
-  const [colorP2, setColorP2] = React.useState(null);
+  const [colorP1, setColorP1] = React.useState(Color.NEON_RED);
+  const [colorP2, setColorP2] = React.useState(Color.NEON_BLUE);
   const [nameP1, setNameP1] = React.useState("");
   const [nameP2, setNameP2] = React.useState("");
   const [aiSetupToggled, setAiSetupToggled] = React.useState(false);

@@ -77,9 +77,12 @@ export const PlayerSetup: React.FC<Props> = (
             }
           />
         </Col>
-        <Col xs={4}>
-          <Form.Label>Color</Form.Label>
-          <Image src={getImageForColor(colorP1)} />
+        <Col xs={1}>
+          <Image
+            src={getImageForColor(colorP1)}
+            style={{ width: "2.5rem" }}
+            className={styles.init_btn_center}
+          />
         </Col>
         <Col xs={4}>
           <OverlayTrigger
@@ -104,6 +107,13 @@ export const PlayerSetup: React.FC<Props> = (
             onBlur={(evt: React.ChangeEvent<HTMLInputElement>) =>
               setNameP2(evt.target.value)
             }
+          />
+        </Col>
+        <Col xs={1}>
+          <Image
+            src={getImageForColor(colorP2)}
+            style={{ width: "2.5rem" }}
+            className={styles.init_btn_center}
           />
         </Col>
         <Col xs={4}>
