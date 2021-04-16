@@ -65,7 +65,7 @@ export const InitialForm = ({
                       <Form.Check
                         type={"radio"}
                         id={`ai-checkbox`}
-                        label={`Enable AI`}
+                        label={`Local Multiplayer`}
                         className={styles.vert_20}
                         checked={!aiEnabled}
                         onChange={() => setAiEnabled(false)}
@@ -101,7 +101,7 @@ export const InitialForm = ({
                       <Form.Check
                         type={"radio"}
                         id={`ai-checkbox`}
-                        label={`Enable AI`}
+                        label={`AI Mode`}
                         className={styles.vert_20}
                         checked={aiEnabled}
                         onChange={() => setAiEnabled(true)}
@@ -127,8 +127,10 @@ export const InitialForm = ({
           </Col>
         </Row>
         <Row className={styles.top_buffer}>
-          <Col>
-            <Button onClick={handleDone}>Done</Button>
+          <Col className={styles.center_col}>
+            <Button onClick={handleDone} variant="success" size="lg">
+              Play ►
+            </Button>
           </Col>
         </Row>
         {children}
