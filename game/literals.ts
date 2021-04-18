@@ -1,8 +1,13 @@
-import { Neon_Color } from "./types";
+import { GridCell, Neon_Color } from "./types";
 
-//BASE NUMBER THAT CAN BE USED AS A STARTING COORDINATE FOR THE CANVAS
-const X_START = 150;
-const Y_START = 150;
+const P1_STARTING_POS: GridCell = {
+  rowIdx: 15,
+  colIdx: 10,
+};
+const P2_STARTING_POS: GridCell = {
+  rowIdx: 30,
+  colIdx: 10,
+};
 
 //THE HEIGHT AND WIDTH OF THE CANVAS IN THE HTML
 const CANVAS_WIDTH = 1000;
@@ -40,8 +45,8 @@ const NEON_COLORS: Neon_Color[] = [
 ];
 
 export {
-  X_START,
-  Y_START,
+  P1_STARTING_POS,
+  P2_STARTING_POS,
   CANVAS_HEIGHT,
   CANVAS_WIDTH,
   PLAYER_WIDTH,

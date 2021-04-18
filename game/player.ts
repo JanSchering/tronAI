@@ -1,68 +1,68 @@
 import * as React from "react";
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "./literals";
 import { getColorCode } from "./utils";
-import { Direction, Color, Coordinate } from "./types";
+import { Direction, Color, Coordinate, GridCell } from "./types";
 import { throws } from "node:assert";
 
 export type PlayerProps = {
   color: Color;
-  coordinates: Coordinate;
+  position: GridCell;
   name: string;
 };
 
 export class Player {
-  private color: Color;
-  private coordinates: Coordinate;
-  private name: string;
-  private direction: Direction;
-  private alive: boolean;
+  private _color: Color;
+  private _position: GridCell;
+  private _name: string;
+  private _direction: Direction;
+  private _alive: boolean;
 
   constructor(props: PlayerProps) {
-    this.color = props.color;
-    this.coordinates = props.coordinates;
-    this.name = props.name;
-    this.direction = Direction.NONE;
-    this.alive = true;
+    this._color = props.color;
+    this._position = props.position;
+    this._name = props.name;
+    this._direction = Direction.NONE;
+    this._alive = true;
   }
 
-  setColor(color: Color): void {
-    this.color = color;
+  public set color(color: Color) {
+    this._color = color;
   }
 
-  getColor(): Color {
-    return this.color;
+  public get color(): Color {
+    return this._color;
   }
 
-  setCoordinates(coordinates: Coordinate) {
-    this.coordinates = coordinates;
+  public set position(position: GridCell) {
+    this._position = position;
   }
 
-  getCoordinates(): Coordinate {
-    return this.coordinates;
+  public get position(): GridCell {
+    return this._position;
   }
 
-  setName(name: string): void {
-    this.name = name;
+  public set name(name: string) {
+    this._name = name;
   }
 
-  getName(): string {
-    return this.name;
+  public get name(): string {
+    return this._name;
   }
 
-  setDirection(direction: Direction): void {
-    this.direction = direction;
+  public set direction(direction: Direction) {
+    this._direction = direction;
   }
 
-  getDirection(): Direction {
-    return this.direction;
+  public get direction(): Direction {
+    return this._direction;
   }
 
-  setAlive(alive: boolean): void {
-    this.alive = alive;
+  public set alive(alive: boolean) {
+    this._alive = alive;
   }
 
-  getAlive(): boolean {
-    return this.alive;
+  public get alive(): boolean {
+    return this._alive;
   }
 
   /**
@@ -70,31 +70,31 @@ export class Player {
    * @param player
    * @param setCoordinates
    */
-  move(): void {
-    const { x, y } = this.coordinates;
+  public move(): void {
+    const { rowIdx, colIdx } = this._position;
     switch (this.direction) {
       case Direction.UP:
-        this.coordinates = {
-          ...this.coordinates,
-          y: y - 5,
+        this._position = {
+          ...this._position,
+          rowIdx: rowIdx - 1,
         };
         break;
       case Direction.DOWN:
-        this.coordinates = {
-          ...this.coordinates,
-          y: y + 5,
+        this._position = {
+          ...this._position,
+          rowIdx: rowIdx + 1,
         };
         break;
       case Direction.LEFT:
-        this.coordinates = {
-          ...this.coordinates,
-          x: x - 5,
+        this._position = {
+          ...this._position,
+          colIdx: colIdx - 1,
         };
         break;
       case Direction.RIGHT:
-        this.coordinates = {
-          ...this.coordinates,
-          x: x + 5,
+        this._position = {
+          ...this._position,
+          colIdx: colIdx + 1,
         };
         break;
       default:

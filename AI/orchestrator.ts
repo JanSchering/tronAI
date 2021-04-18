@@ -2,12 +2,15 @@ import { Player } from "../game/player";
 import {
   CANVAS_HEIGHT,
   CANVAS_WIDTH,
-  X_START,
-  Y_START,
+  P1_STARTING_POS,
+  P2_STARTING_POS,
+  PLAYER_HEIGHT,
+  PLAYER_WIDTH,
 } from "../game/literals";
 import { Model } from "./model";
 import { Memory } from "./memory";
 import { Standard_Color } from "../game/types";
+import { getGridMetaData } from "../game/grid";
 import { getStateTensor, step, reset, renderPlayer } from "../game/environment";
 import * as tf from "@tensorflow/tfjs";
 
@@ -44,18 +47,12 @@ export class Orchestrator {
     this.player1 = new Player({
       name: "p1",
       color: Standard_Color.RED,
-      coordinates: {
-        x: X_START,
-        y: Y_START,
-      },
+      position: P1_STARTING_POS,
     });
     this.player2 = new Player({
       name: "p2",
       color: Standard_Color.BLUE,
-      coordinates: {
-        x: X_START,
-        y: Y_START * 2,
-      },
+      position: P2_STARTING_POS,
     });
     this.memory = memory;
     this.p1Model = p1Model;
@@ -77,7 +74,7 @@ export class Orchestrator {
   }
 
   getReward(player: Player) {
-    return player.getAlive()
+    return player.alive
       ? this.logRewardParam * Math.log(this.steps + 1)
       : -1000;
   }
@@ -87,18 +84,26 @@ export class Orchestrator {
     let state = getStateTensor(ctx);
     let p1Reward = 0;
     let p2Reward = 0;
+    const gridInfo = getGridMetaData(
+      PLAYER_WIDTH,
+      PLAYER_HEIGHT,
+      CANVAS_WIDTH,
+      CANVAS_HEIGHT
+    );
+    const filledCellTracker: any = {};
+    //TODO: Use the filled Cell tracker to track the cells.
     var handler = setInterval(() => {
       const p1Action: number = this.p1Model.chooseAction(state, this.epsilon);
-      this.player1.setDirection(p1Action);
+      this.player1.direction = p1Action;
 
       const p2Action: number = this.p2Model.chooseAction(state, this.epsilon);
-      this.player2.setDirection(p2Action);
+      this.player2.direction = p2Action;
 
-      step(this.player1, this.player2, ctx);
+      step(this.player1, this.player2, ctx, gridInfo, filledCellTracker);
 
       let done = false;
 
-      if (!this.player1.getAlive() || !this.player2.getAlive()) {
+      if (!this.player1.alive || !this.player2.alive) {
         done = true;
       }
 
@@ -126,12 +131,17 @@ export class Orchestrator {
 
       if (done || this.steps == this.maxStepsPerGame) {
         this.rewardStore.push([p1Reward, p2Reward]);
-        reset(this.player1, this.player2, this.canvas.getContext("2d"));
+        reset(
+          this.player1,
+          this.player2,
+          this.canvas.getContext("2d"),
+          gridInfo
+        );
         this.steps = 0;
         clearInterval(handler);
       } else {
-        renderPlayer(this.player1, ctx);
-        renderPlayer(this.player2, ctx);
+        renderPlayer(this.player1, ctx, gridInfo);
+        renderPlayer(this.player2, ctx, gridInfo);
       }
     }, 33);
     await this.replay();

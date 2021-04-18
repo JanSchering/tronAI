@@ -4,19 +4,18 @@ import { GridMetaData, GridCell, Coordinate } from "./types";
  * @description Get Meta information about the grid that the players play on.
  * @param playerWidth
  * @param playerHeight
- * @param canvas
+ * @param canvasWidth
+ * @param canvasHeight
  * @returns
  */
 export const getGridMetaData = (
   playerWidth: number,
   playerHeight: number,
-  canvas: HTMLCanvasElement
+  canvasWidth: number,
+  canvasHeight: number
 ): GridMetaData => {
-  const totalHeight = canvas.height;
-  const totalWidth = canvas.width;
-
-  const numRows = Math.floor(totalHeight / playerHeight);
-  const numCols = Math.floor(totalWidth / playerWidth);
+  const numRows = Math.floor(canvasHeight / playerHeight);
+  const numCols = Math.floor(canvasWidth / playerWidth);
 
   return {
     numCols,
@@ -38,11 +37,21 @@ export const getCoordsFromGridPos = (
   const { playerWidth, playerHeight } = gridInfo;
   const { colIdx, rowIdx } = cell;
   return {
-    x: rowIdx * playerWidth,
-    y: colIdx * playerHeight,
+    x: colIdx * playerWidth,
+    y: rowIdx * playerHeight,
   };
 };
 
+/**
+ * @description Creates a unique identifier for a cell.
+ * @param cell
+ * @returns
+ */
+export const getUniqueCellId = (cell: GridCell): string => {
+  return String.fromCharCode(97 + cell.rowIdx) + cell.colIdx.toString();
+};
+
+//TODO: The implementation of this method currently does not work as intended.
 /**
  * @description Check if a grid Cell is filled with color or empty.
  * @param cell - The cell to check.
