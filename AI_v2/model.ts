@@ -13,7 +13,7 @@ import {
  * @description Creates a tensorflow model.
  * @returns A tensorflow neural network.
  */
-const createModel = (): tf.Sequential => {
+export const createModel = (): tf.Sequential => {
   const model = tf.sequential();
 
   //First hidden Layer, which also defines the input shape of the model

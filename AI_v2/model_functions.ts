@@ -86,9 +86,9 @@ const replayExperience = async (props: TrainingProps) => {
       reward + discountFactor * future_reward.max().dataSync()[0];
 
     // We can now push the state to the input collector
-    x.push(<number[]>(<unknown>state.dataSync()));
+    x.push(Array.from(state.dataSync()));
     // For the labels/outputs, we push the updated Q values
-    y.push(current_Q.dataSync());
+    y.push(Array.from(current_Q.dataSync()));
 
     // at the end we have to take care of disposing of the created Tensors
     current_Q.dispose();

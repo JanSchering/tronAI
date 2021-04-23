@@ -13,9 +13,9 @@ import {
 const NUM_ACTIONS = 4;
 
 /**
- * We need to provide the current x and y coordinate for both players
+ * We need to provide the current row index and column index for both players
  */
-const NUM_COORDINATES = 4;
+const NUM_POSITION_INDICE = 4;
 
 /**
  * We have separated our canvas into a grid. We need an Input for each cell that can be filled.
@@ -25,8 +25,8 @@ const NUM_COORDINATES = 4;
 const NUM_INPUTS =
   CANVAS_WIDTH / PLAYER_WIDTH +
   CANVAS_HEIGHT / PLAYER_HEIGHT +
-  NUM_ACTIONS +
-  NUM_COORDINATES;
+  NUM_ACTIONS * 2 +
+  NUM_POSITION_INDICE * 2;
 
 /**
  * For now, the number of outputs will just be the number of actions.

@@ -117,52 +117,6 @@ export const reset = (
 };
 
 /**
- * @description Tensorflow Helper-Function: Turns the current state of the canvas into a tensor.
- * @param ctx - The Canvas Rendering Context of the Game board.
- * @returns
- */
-export const getStateTensor = (ctx: CanvasRenderingContext2D): tf.Tensor1D => {
-  //TODO: The Tensor is currently only using the canvas information. Need to also append the current coordinates
-  // and the current direction of the player to the Tensor. Those are super important.
-  return tf.tidy(() => {
-    let imageData = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT).data;
-
-    const downScaled = new Array();
-    const red: number[] = [];
-    const green: number[] = [];
-    const blue: number[] = [];
-    imageData.forEach((channel, idx) => {
-      switch (idx % 4) {
-        case 0:
-          red.push(channel > 0 ? 1 : 0);
-          break;
-        case 1:
-          green.push(channel > 0 ? 1 : 0);
-          break;
-        case 2:
-          blue.push(channel > 0 ? 1 : 0);
-          break;
-        default:
-          break;
-      }
-    });
-
-    for (var i = 0; i < CANVAS_HEIGHT; i = i + 5) {
-      for (var j = 0; j < CANVAS_WIDTH; j = j + 5) {
-        const arrayIdx = i * CANVAS_WIDTH + j;
-        downScaled.push(
-          red[arrayIdx] + green[arrayIdx] + blue[arrayIdx] > 0 ? 1 : 0
-        );
-      }
-    }
-
-    return tf
-      .tensor(downScaled)
-      .reshape([1, (CANVAS_HEIGHT / 5) * (CANVAS_WIDTH / 5)]);
-  });
-};
-
-/**
  * @description Function to initiate the keydownListener for the game Input.
  * @param player1 - The first player.
  * @param player2 - The second player.
