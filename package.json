@@ -28,6 +28,7 @@
     "cors": "^2.8.5",
     "css-loader": "^5.2.0",
     "css-modules-typescript-loader": "^4.0.1",
+    "dotenv": "^8.2.0",
     "eslint": "^7.23.0",
     "eslint-loader": "^4.0.2",
     "file-loader": "^6.2.0",
@@ -48,7 +49,7 @@
     "webpack-cli": "^4.6.0"
   },
   "scripts": {
-    "dev": "export NODE_ENV='development' && webpack --mode development --watch",
+    "dev": "webpack --mode development --watch",
     "test": "jest"
   }
 }

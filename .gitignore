@@ -1,4 +1,8 @@
 node_modules/**
 dist/**/*.js
 dist/**/*.png
+dist/**/*.jpeg
+dist/**/*.jpg
+dist/**/*.css
 .vscode/
+.env

@@ -122,7 +122,7 @@ export const InitialForm = ({
                         eventKey="1"
                         onClick={handleAIToggle}
                       >
-                        AI Setup {aiSetupToggled ? "▼" : "►"}
+                        AI Setup {aiSetupToggled ? "\▼" : "\►"}
                       </Accordion.Toggle>
                     </Col>
                   </Row>

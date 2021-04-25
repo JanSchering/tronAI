@@ -1,5 +1,6 @@
 var webpack = require("webpack");
 const path = require("path");
+require("dotenv").config();
 const isDevelopment = process.env.NODE_ENV === "development";
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
