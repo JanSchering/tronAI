@@ -8,61 +8,39 @@ import {
   NEON_COLORS,
 } from "./literals";
 import { Player } from "./player";
-import {
-  Direction,
-  Color,
-  Standard_Color,
-  Neon_Color,
-  GridMetaData,
-  GridCell,
-} from "./types";
+import { Direction, Neon_Color, GridCell } from "./types";
 import { getColorCode, neonSquare } from "./utils";
-import { getCoordsFromGridPos, isCellFilled, getUniqueCellId } from "./grid";
+import { Grid } from "./grid";
 
 /**
  * @description Take a single time step in the game.
  * @param player1 - The first player of the game.
  * @param player2 - The second player of the game.
- * @param ctx - The Rendering Context of the Canvas.
- * @param gridInfo - Meta Information about the grid of the playfield.
- * @param filledCellTracker - Dictionary to track filled cells.
+ * @param grid - The grid of the playfield.
  */
-export const step = (
-  player1: Player,
-  player2: Player,
-  ctx: CanvasRenderingContext2D,
-  gridInfo: GridMetaData,
-  filledCellTracker: object
-): void => {
+export const step = (player1: Player, player2: Player, grid: Grid): void => {
   player1.move();
   player2.move();
-  player1.alive = healthCheckup(player1, gridInfo, filledCellTracker);
-  player2.alive = healthCheckup(player2, gridInfo, filledCellTracker);
+  player1.alive = healthCheckup(player1, grid);
+  player2.alive = healthCheckup(player2, grid);
 };
 
 /**
  * @description Checks if the Player is actually still alive or dead
  * @param player - The player to check
- * @param gridInfo - Meta Data about the grid of the playfield.
- * @param filledCellTracker - Object to keep track of which cells are filled.
+ * @param grid - The grid of the playfield.
  * @returns
  */
-export const healthCheckup = (
-  player: Player,
-  gridInfo: GridMetaData,
-  filledCellTracker: any
-): boolean => {
+export const healthCheckup = (player: Player, grid: Grid): boolean => {
   let alive = true;
   if (player.direction !== Direction.NONE) {
     const { rowIdx, colIdx } = player.position;
-    const { numRows, numCols } = gridInfo;
-    const cellID = getUniqueCellId(player.position);
     alive =
-      !filledCellTracker[cellID] &&
+      !grid.isCellFilled(player.position) &&
       rowIdx >= 0 &&
-      rowIdx < numRows &&
+      rowIdx < grid.numRows &&
       colIdx >= 0 &&
-      colIdx < numCols;
+      colIdx < grid.numCols;
   }
   return alive;
 };
@@ -71,15 +49,15 @@ export const healthCheckup = (
  * @description Renders the player according to its current position onto the canvas.
  * @param player - The player that we want to render.
  * @param ctx - The Rendering Context of the Canvas.
- * @param gridInfo - Meta Data about the grid of the playfield.
+ * @param grid - The grid of the playfield.
  */
 export const renderPlayer = (
   player: Player,
   ctx: CanvasRenderingContext2D,
-  gridInfo: GridMetaData
+  grid: Grid
 ): void => {
   const color = player.color;
-  const { x, y } = getCoordsFromGridPos(gridInfo, player.position);
+  const { x, y } = grid.getCoordsForCell(player.position);
   if (!isNeon(color)) {
     ctx.fillStyle = color;
     ctx.fillRect(x, y, 5, 5);
@@ -94,14 +72,14 @@ export const renderPlayer = (
  * @param p1 - The first player.
  * @param p2 - The second player.
  * @param ctx - Canvas Rendering Context of the Game Board.
- * @param gridInfo - Meta Data of the grid of the playfield.
+ * @param grid - The grid of the playfield.
  */
 export const reset = (
   p1: Player,
   p2: Player,
   ctx: CanvasRenderingContext2D,
-  gridInfo: GridMetaData
-): void => {
+  grid: Grid
+): Grid => {
   // Reset the directions of the players
   p1.direction = Direction.NONE;
   p2.direction = Direction.NONE;
@@ -112,8 +90,23 @@ export const reset = (
   p2.position = P2_STARTING_POS;
 
   // Render the players in their initial positions
-  renderPlayer(p1, ctx, gridInfo);
-  renderPlayer(p2, ctx, gridInfo);
+  renderPlayer(p1, ctx, grid);
+  renderPlayer(p2, ctx, grid);
+
+  const newGrid = new Grid({
+    numRows: grid.numRows,
+    numCols: grid.numCols,
+    cellHeight: grid.cellHeight,
+    cellWidth: grid.cellWidth,
+  });
+
+  newGrid.setValue(1, p1.position.rowIdx, p1.position.colIdx);
+  newGrid.setValue(1, p2.position.rowIdx, p2.position.colIdx);
+
+  // To prohibit memory issues, we dispose the tensor of the old board
+  grid.grid.dispose();
+
+  return newGrid;
 };
 
 /**

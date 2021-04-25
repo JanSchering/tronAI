@@ -6,9 +6,9 @@ import { Standard_Color } from "../game/types";
 import { P1_STARTING_POS, P2_STARTING_POS } from "../game/literals";
 
 /**
- *
+ * @description Runs the Training mode of the AI system.
  */
-const runAIMode = (props: AIModeProps) => {
+const runAITrainingMode = (props: AIModeProps) => {
   const { numGames, maxStepsPerGame, player1, player2 } = props;
   const p1Model: tf.Sequential = createModel();
   const p2Model: tf.Sequential = createModel();

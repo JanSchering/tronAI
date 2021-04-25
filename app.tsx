@@ -2,7 +2,7 @@ import * as React from "react";
 import { render } from "react-dom";
 import { Player } from "./game/player";
 import { Color, Direction, GridCell, Standard_Color } from "./game/types";
-import { getGridMetaData, getUniqueCellId } from "./game/grid";
+import { Grid } from "./game/grid";
 import {
   P1_STARTING_POS,
   P2_STARTING_POS,
@@ -58,40 +58,35 @@ export const Main: React.FC = React.memo(
 
     React.useEffect(() => {
       if (setupDone && ctx) {
-        const gridInfo = getGridMetaData(
-          PLAYER_WIDTH,
-          PLAYER_HEIGHT,
-          CANVAS_WIDTH,
-          CANVAS_HEIGHT
-        );
-        const filledCellTracker: any = {};
-        const p1CellID = getUniqueCellId(P1_STARTING_POS);
-        const p2CellID = getUniqueCellId(P2_STARTING_POS);
-        filledCellTracker[p1CellID] = true;
-        filledCellTracker[p2CellID] = true;
+        const grid = new Grid({
+          numRows: CANVAS_HEIGHT / PLAYER_HEIGHT,
+          numCols: CANVAS_WIDTH / PLAYER_WIDTH,
+          cellHeight: PLAYER_HEIGHT,
+          cellWidth: PLAYER_WIDTH,
+        });
+        grid.setValue(1, P1_STARTING_POS.rowIdx, P1_STARTING_POS.colIdx);
+        grid.setValue(1, P2_STARTING_POS.rowIdx, P2_STARTING_POS.colIdx);
         //Initially render the players
-        renderPlayer(player1, ctx, gridInfo);
-        renderPlayer(player2, ctx, gridInfo);
+        renderPlayer(player1, ctx, grid);
+        renderPlayer(player2, ctx, grid);
         //Start listening to input
         keydownListener(player1, player2);
         //Start the game Loop
         const gameLoop = setInterval(() => {
-          step(player1, player2, ctx, gridInfo, filledCellTracker);
+          step(player1, player2, grid);
           if (!player1.alive) {
-            reset(player1, player2, ctx, gridInfo);
+            reset(player1, player2, ctx, grid);
             setP2Score(p2Score + 1);
             clearInterval(gameLoop);
           } else if (!player2.alive) {
-            reset(player1, player2, ctx, gridInfo);
+            reset(player1, player2, ctx, grid);
             setP1Score(p1Score + 1);
             clearInterval(gameLoop);
           } else {
-            const p1NewCellID = getUniqueCellId(player1.position);
-            const p2NewCellID = getUniqueCellId(player2.position);
-            filledCellTracker[p1NewCellID] = true;
-            filledCellTracker[p2NewCellID] = true;
-            renderPlayer(player1, ctx, gridInfo);
-            renderPlayer(player2, ctx, gridInfo);
+            grid.setValue(1, player1.position.rowIdx, player1.position.colIdx);
+            grid.setValue(1, player2.position.rowIdx, player2.position.colIdx);
+            renderPlayer(player1, ctx, grid);
+            renderPlayer(player2, ctx, grid);
           }
         }, 40);
       }
