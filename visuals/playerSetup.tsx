@@ -8,7 +8,6 @@ import Popover from "react-bootstrap/Popover";
 import Image from "react-bootstrap/Image";
 
 import { ColorPicker } from "./colorPicker";
-import { ColorPickerV2 } from "./colorPickerV2";
 import { Color, Standard_Color } from "../game/types";
 import { NEON_RED, NEON_BLUE, NEON_GREEN, NEON_YELLOW } from "../game/literals";
 import { isNeon } from "../game/environment";
@@ -61,7 +60,7 @@ export const PlayerSetup: React.FC<Props> = (
         </Row>
       </Popover.Title>
       <Popover.Content className={styles.no_padding}>
-        <ColorPickerV2 color={color} callBack={callBack} />
+        <ColorPicker color={color} callBack={callBack} />
       </Popover.Content>
     </Popover>
   );
