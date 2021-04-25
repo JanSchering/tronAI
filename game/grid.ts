@@ -48,7 +48,7 @@ export class Grid {
 
   /**
    * @description Get the corresponding coordinates to a grid cell.
-   * @param cell - The cell to get coordinates for
+   * @param cell - The cell to get coordinates for.
    * @returns the Coordinates of the top left corner of the cell.
    */
   public getCoordsForCell(cell: GridCell): Coordinate {
@@ -60,8 +60,19 @@ export class Grid {
     };
   }
 
+  /**
+   * @description Checks if a given Grid Cell is filled.
+   * @param cell 
+   */
   public isCellFilled(cell: GridCell): boolean {
     return this._grid.bufferSync().get(cell.rowIdx, cell.colIdx) === 1;
+  }
+
+  /**
+   * @description Turns the Grid into a 1 Dimensional Array.
+   */
+  public get gridAsArray(): number[] {
+    return Array.from(this._grid.dataSync());
   }
 }
 

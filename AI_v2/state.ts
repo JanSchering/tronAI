@@ -1,14 +1,14 @@
-import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../game/literals";
 import { NUM_ACTIONS } from "./model_constants";
 import * as tf from "@tensorflow/tfjs";
 import { Player } from "../game/player";
-import { Direction, GridMetaData } from "../game/types";
+import { Direction } from "../game/types";
+import { Grid } from "../game/grid";
 
 /**
  * @description Tensorflow Helper-Function: Turns the current state of the canvas into a tensor.
  */
 export const getStateTensor = (props: Props): tf.Tensor1D => {
-  const { ctx, player1, player2, gridInfo } = props;
+  const { player1, player2, grid } = props;
 
   const state: number[] = [];
 
@@ -33,22 +33,20 @@ export const getStateTensor = (props: Props): tf.Tensor1D => {
    * To solve that we have to fit the position into a 0-1 range.
    */
   // Naive approach: we just divide the cell indices by the total amount to get a range between 0 and 1
-  state.push(player1.position.rowIdx / gridInfo.numRows);
-  state.push(player1.position.colIdx / gridInfo.numCols);
-  state.push(player2.position.rowIdx / gridInfo.numRows);
-  state.push(player2.position.colIdx / gridInfo.numCols);
+  state.push(player1.position.rowIdx / grid.numRows);
+  state.push(player1.position.colIdx / grid.numCols);
+  state.push(player2.position.rowIdx / grid.numRows);
+  state.push(player2.position.colIdx / grid.numCols);
 
   /**
    * Finally, we have to provide an overview over the state of the board
    */
 
-  return tf.tensor1d();
+  return tf.tensor1d(state.concat(grid.gridAsArray));
 };
 
 type Props = {
-  ctx: CanvasRenderingContext2D;
   player1: Player;
   player2: Player;
-  gridInfo: GridMetaData;
-  filledCellTracker: any;
+  grid: Grid;
 };
