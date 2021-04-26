@@ -64,7 +64,7 @@ export class Grid {
    * @param cell
    */
   public isCellFilled(cell: GridCell): boolean {
-    return this._grid.bufferSync().get(cell.rowIdx, cell.colIdx) === 1;
+    return this._grid.bufferSync().get(cell.rowIdx, cell.colIdx) >= 1;
   }
 
   /**
