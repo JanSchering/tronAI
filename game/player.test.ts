@@ -1,7 +1,6 @@
 import { Player } from "./player";
-import * as Literals from "./literals";
 import { Standard_Color, Direction } from "./types";
-import { P1_STARTING_POS } from "./literals";
+import { P1_STARTING_POS, P2_STARTING_POS } from "./literals";
 
 const STD_NAME = "test";
 const STD_COLOR = Standard_Color.RED;
@@ -24,29 +23,80 @@ describe("Player Class", () => {
     });
   });
 
-  describe("movePlayer", () => {
-    it("Doesn't Move when no direction is set", () => {
-      const newPlayer = new Player({
+  describe("setters", () => {
+    let newPlayer: Player;
+
+    beforeEach(() => {
+      newPlayer = new Player({
         name: STD_NAME,
         color: STD_COLOR,
         position: P1_STARTING_POS,
       });
-      //Confirm initial position
+    });
+
+    it("Can set the color", () => {
+      expect(newPlayer.color).toBe(STD_COLOR);
+
+      newPlayer.color = Standard_Color.GREEN;
+
+      expect(newPlayer.color).toBe(Standard_Color.GREEN);
+    });
+
+    it("Can set the position", () => {
+      expect(newPlayer.position).toBe(P1_STARTING_POS);
+
+      newPlayer.position = P2_STARTING_POS;
+
+      expect(newPlayer.position).toBe(P2_STARTING_POS);
+    });
+
+    it("Can set the position", () => {
+      expect(newPlayer.position).toBe(P1_STARTING_POS);
+
+      newPlayer.position = P2_STARTING_POS;
+
+      expect(newPlayer.position).toBe(P2_STARTING_POS);
+    });
+
+    it("Can set the name", () => {
+      expect(newPlayer.name).toBe(STD_NAME);
+
+      const newName = "this is a new name";
+
+      newPlayer.name = newName;
+
+      expect(newPlayer.name).toBe(newName);
+    });
+
+    it("Can set the alive status", () => {
+      expect(newPlayer.alive).toBe(true);
+
+      newPlayer.alive = false;
+
+      expect(newPlayer.alive).toBe(false);
+    });
+  });
+
+  describe("movePlayer", () => {
+    let newPlayer: Player;
+
+    beforeEach(() => {
+      newPlayer = new Player({
+        name: STD_NAME,
+        color: STD_COLOR,
+        position: P1_STARTING_POS,
+      });
+    });
+
+    it("Doesn't Move when no direction is set", () => {
       expect(newPlayer.position).toBe(P1_STARTING_POS);
 
       newPlayer.move();
 
-      //Confirm that the position did not change
       expect(newPlayer.position).toBe(P1_STARTING_POS);
     });
 
     it("Direction == 'LEFT' adjusts the position properly", () => {
-      const newPlayer = new Player({
-        name: STD_NAME,
-        color: STD_COLOR,
-        position: P1_STARTING_POS,
-      });
-      //Confirm initial position
       expect(newPlayer.position).toBe(P1_STARTING_POS);
 
       newPlayer.direction = Direction.LEFT; // Set the direction
@@ -60,12 +110,6 @@ describe("Player Class", () => {
     });
 
     it("Direction == 'RIGHT' adjusts the position properly", () => {
-      const newPlayer = new Player({
-        name: STD_NAME,
-        color: STD_COLOR,
-        position: P1_STARTING_POS,
-      });
-      //Confirm initial position
       expect(newPlayer.position).toBe(P1_STARTING_POS);
 
       newPlayer.direction = Direction.RIGHT; // Set the direction
@@ -79,12 +123,6 @@ describe("Player Class", () => {
     });
 
     it("Direction == 'UP' adjusts the position properly", () => {
-      const newPlayer = new Player({
-        name: STD_NAME,
-        color: STD_COLOR,
-        position: P1_STARTING_POS,
-      });
-      //Confirm initial position
       expect(newPlayer.position).toBe(P1_STARTING_POS);
 
       newPlayer.direction = Direction.UP; // Set the direction
@@ -98,12 +136,6 @@ describe("Player Class", () => {
     });
 
     it("Direction == 'DOWN' adjusts the position properly", () => {
-      const newPlayer = new Player({
-        name: STD_NAME,
-        color: STD_COLOR,
-        position: P1_STARTING_POS,
-      });
-      //Confirm initial position
       expect(newPlayer.position).toBe(P1_STARTING_POS);
 
       newPlayer.direction = Direction.DOWN; // Set the direction

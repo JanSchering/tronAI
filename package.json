@@ -50,6 +50,7 @@
   },
   "scripts": {
     "dev": "webpack --mode development --watch",
-    "test": "jest"
+    "test": "jest",
+    "testCoverage": "jest --coverage"
   }
 }

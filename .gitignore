@@ -4,5 +4,6 @@ dist/**/*.png
 dist/**/*.jpeg
 dist/**/*.jpg
 dist/**/*.css
+coverage/
 .vscode/
 .env
