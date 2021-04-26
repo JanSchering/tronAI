@@ -13,7 +13,12 @@ import {
 } from "./game/literals";
 import { Canvas, useCanvas } from "./visuals/canvas";
 import { InitialForm } from "./visuals/init";
-import { step, renderPlayer, reset, keydownListener } from "./game/environment";
+import {
+  step,
+  renderPlayers,
+  reset,
+  keydownListener,
+} from "./game/environment";
 import { ScoreBoard } from "./visuals/scoreBoard";
 import "./style/global.scss";
 import styles from "./style/app.module.scss";
@@ -67,8 +72,7 @@ export const Main: React.FC = React.memo(
         grid.setValue(1, P1_STARTING_POS.rowIdx, P1_STARTING_POS.colIdx);
         grid.setValue(1, P2_STARTING_POS.rowIdx, P2_STARTING_POS.colIdx);
         //Initially render the players
-        renderPlayer(player1, ctx, grid);
-        renderPlayer(player2, ctx, grid);
+        renderPlayers([player1, player2], ctx, grid);
         //Start listening to input
         keydownListener(player1, player2);
         //Start the game Loop
@@ -85,8 +89,7 @@ export const Main: React.FC = React.memo(
           } else {
             grid.setValue(1, player1.position.rowIdx, player1.position.colIdx);
             grid.setValue(1, player2.position.rowIdx, player2.position.colIdx);
-            renderPlayer(player1, ctx, grid);
-            renderPlayer(player2, ctx, grid);
+            renderPlayers([player1, player2], ctx, grid);
           }
         }, 40);
       }

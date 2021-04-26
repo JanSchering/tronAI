@@ -1,4 +1,5 @@
 import * as tf from "@tensorflow/tfjs";
+import { getRandomInt } from "./utils";
 
 type MemoryObject = {
   state: tf.Tensor1D;
@@ -13,3 +14,25 @@ type MemoryObject = {
  * based on the predictions it made and the actual results.
  */
 export type Memory = Array<MemoryObject>;
+
+/**
+ * @description Randomly takes a batch of samples out of the memory.
+ * @param memory - The memory to sample from.
+ */
+export const sampleFromMemory = (memory: Memory, samplesize: number) => {
+  // Getting the total number of samples in Memory
+  const totalSampleSize: number = memory.length;
+
+  // If theres less samples in Memory than asked for, we just return the whole Memory
+  if (totalSampleSize <= samplesize) {
+    return memory;
+  }
+
+  // Building up a batch of random samples.
+  const batch: Memory = [];
+  for (let i = 0; i < samplesize; i++) {
+    batch.push(memory[getRandomInt(totalSampleSize)]);
+  }
+
+  return batch;
+};

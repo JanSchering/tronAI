@@ -1,8 +1,10 @@
 import * as tf from "@tensorflow/tfjs";
 import { Tensor } from "@tensorflow/tfjs";
 import { Player } from "../game/player";
+import { Direction } from "../game/types";
 import { NUM_ACTIONS, NUM_INPUTS, NUM_OUTPUTS } from "./model_constants";
-import { Memory } from "./model_memory";
+import { Memory, sampleFromMemory } from "./model_memory";
+import { getRandomInt } from "./utils";
 
 /**
  * @description let a model pick an action to take for the provided state of the environment.
@@ -11,11 +13,11 @@ import { Memory } from "./model_memory";
  * @param epsilon - The exploration parameter.
  * @returns
  */
-const chooseAction = (
+export const chooseAction = (
   model: tf.Sequential,
   state: tf.Tensor1D,
   epsilon: number
-): number => {
+): Direction => {
   //We want to be able to explore other actions:
   //For that purpose we generate a random number between 0 and 1,
   //If that number is lower than our exploration parameter,
@@ -24,24 +26,21 @@ const chooseAction = (
     return getRandomInt(NUM_ACTIONS);
   } else {
     const prediction = model.predict(state);
-    const generated_choice = tf.multinomial(<any>prediction, 1).arraySync()[0];
-    return <number>generated_choice;
-  }
-};
+    const generated_choice = <number>(
+      tf.multinomial(<any>prediction, 1).arraySync()[0]
+    );
 
-/**
- * @description Helper-Function: Gets a random Integer in the range of the provided number
- * @param max - The range.
- */
-const getRandomInt = (max: number): number => {
-  return Math.floor(Math.random() * max);
+    //TODO: Is there a cleaner way to do this?? Need to parse the enum double
+    let direction = <string>Direction[generated_choice];
+    return (Direction[direction as any] as any) as Direction;
+  }
 };
 
 /**
  * @description Allows the model to replay the game saved in the Memory Object and learn from it.
  * @param props - The metadata about the last game.
  */
-const replayExperience = async (props: TrainingProps) => {
+export const replayExperience = async (props: TrainingProps) => {
   //We want to implement deep Q-learning in here.
 
   const { model_memory, model, discountFactor } = props;
@@ -110,25 +109,20 @@ const replayExperience = async (props: TrainingProps) => {
 };
 
 /**
- * @description Randomly takes a batch of samples out of the memory.
- * @param memory - The memory to sample from.
+ * @description Calculates the reward to give a player based on his status, the current step
+ * and a parameter to control the logarithmic reward curve.
+ * Assumes the steps are counted from 0.
+ * @param player - The player to calculate the reward for.
+ * @param currentStep - The number of the current step of the game.
+ * @param logRewardParam - Controls the logarithmic reward curve.
+ * @returns The reward for a player.
  */
-const sampleFromMemory = (memory: Memory, samplesize: number) => {
-  // Getting the total number of samples in Memory
-  const totalSampleSize: number = memory.length;
-
-  // If theres less samples in Memory than asked for, we just return the whole Memory
-  if (totalSampleSize <= samplesize) {
-    return memory;
-  }
-
-  // Building up a batch of random samples.
-  const batch: Memory = [];
-  for (let i = 0; i < samplesize; i++) {
-    batch.push(memory[getRandomInt(totalSampleSize)]);
-  }
-
-  return batch;
+export const calculateReward = (
+  player: Player,
+  currentStep: number,
+  logRewardParam: number
+): number => {
+  return player.alive ? logRewardParam * Math.log(currentStep + 1) : -1000;
 };
 
 type TrainingProps = {

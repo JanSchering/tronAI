@@ -39,9 +39,8 @@ export const getStateTensor = (props: Props): tf.Tensor1D => {
   state.push(player2.position.colIdx / grid.numCols);
 
   /**
-   * Finally, we have to provide an overview over the state of the board
+   * Finally, we have to provide an overview over the state of the board and return the complete overview as a tf Tensor.
    */
-
   return tf.tensor1d(state.concat(grid.gridAsArray));
 };
 

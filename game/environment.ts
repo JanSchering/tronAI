@@ -23,6 +23,8 @@ export const step = (player1: Player, player2: Player, grid: Grid): void => {
   player2.move();
   player1.alive = healthCheckup(player1, grid);
   player2.alive = healthCheckup(player2, grid);
+  grid.setValue(1, player1.position);
+  grid.setValue(1, player2.position);
 };
 
 /**
@@ -68,6 +70,20 @@ export const renderPlayer = (
 };
 
 /**
+ * @description Renders the current position of the players to the Canvas.
+ * @param players - The players that we want to render.
+ * @param ctx - The Rendering Context of the Canvas.
+ * @param grid - The grid of the playfield.
+ */
+export const renderPlayers = (
+  players: Player[],
+  ctx: CanvasRenderingContext2D,
+  grid: Grid
+) => {
+  players.forEach((player) => renderPlayer(player, ctx, grid));
+};
+
+/**
  * @description Reset the environment for a new round.
  * @param p1 - The first player.
  * @param p2 - The second player.
@@ -100,8 +116,8 @@ export const reset = (
     cellWidth: grid.cellWidth,
   });
 
-  newGrid.setValue(1, p1.position.rowIdx, p1.position.colIdx);
-  newGrid.setValue(1, p2.position.rowIdx, p2.position.colIdx);
+  newGrid.setValue(1, p1.position);
+  newGrid.setValue(1, p2.position);
 
   // To prohibit memory issues, we dispose the tensor of the old board
   grid.grid.dispose();
@@ -165,23 +181,6 @@ export const keydownListener = (player1: Player, player2: Player): void => {
         break;
     }
   });
-};
-
-/**
- * @description Calculates the reward to give a player based on his status, the current step
- * and a parameter to control the logarithmic reward curve.
- * Assumes the steps are counted from 0.
- * @param player - The player to calculate the reward for.
- * @param currentStep - The number of the current step of the game.
- * @param logRewardParam - Controls the logarithmic reward curve.
- * @returns The reward for a player.
- */
-const calculateReward = (
-  player: Player,
-  currentStep: number,
-  logRewardParam: number
-): number => {
-  return player.alive ? logRewardParam * Math.log(currentStep + 1) : -1000;
 };
 
 /**

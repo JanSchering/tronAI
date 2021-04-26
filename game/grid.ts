@@ -39,11 +39,10 @@ export class Grid {
   /**
    * @description Set the value of a cell.
    * @param value - The value to set.
-   * @param rowIdx - Row the cell is in.
-   * @param colIdx - Column the cell is in.
+   * @param position - The cell on the board to set a value for.
    */
-  public setValue(value: number, rowIdx: number, colIdx: number): void {
-    this._grid.bufferSync().set(value, rowIdx, colIdx);
+  public setValue(value: number, position: GridCell): void {
+    this._grid.bufferSync().set(value, position.rowIdx, position.colIdx);
   }
 
   /**
@@ -62,7 +61,7 @@ export class Grid {
 
   /**
    * @description Checks if a given Grid Cell is filled.
-   * @param cell 
+   * @param cell
    */
   public isCellFilled(cell: GridCell): boolean {
     return this._grid.bufferSync().get(cell.rowIdx, cell.colIdx) === 1;

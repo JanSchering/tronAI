@@ -1,13 +1,10 @@
 import { Player } from "./player";
 import * as Literals from "./literals";
-import { Color, Direction } from "./types";
+import { Standard_Color, Direction } from "./types";
+import { P1_STARTING_POS } from "./literals";
 
 const STD_NAME = "test";
-const STD_COLOR = Color.RED;
-const STD_COORDS = {
-  x: 20,
-  y: 30,
-};
+const STD_COLOR = Standard_Color.RED;
 
 describe("Player Class", () => {
   describe("instantiation", () => {
@@ -15,15 +12,15 @@ describe("Player Class", () => {
       const newPlayer = new Player({
         name: STD_NAME,
         color: STD_COLOR,
-        coordinates: STD_COORDS,
+        position: P1_STARTING_POS,
       });
-      expect(newPlayer.getName()).toBe(STD_NAME);
-      expect(newPlayer.getColor()).toBe(STD_COLOR);
-      expect(newPlayer.getCoordinates()).toBe(STD_COORDS);
+      expect(newPlayer.name).toBe(STD_NAME);
+      expect(newPlayer.color).toBe(STD_COLOR);
+      expect(newPlayer.position).toBe(P1_STARTING_POS);
       //The constructor should set standard values
       //for the direction, the score and the alive status
-      expect(newPlayer.getDirection()).toBe(Direction.NONE);
-      expect(newPlayer.getAlive()).toBe(true);
+      expect(newPlayer.direction).toBe(Direction.NONE);
+      expect(newPlayer.alive).toBe(true);
     });
   });
 
@@ -32,33 +29,33 @@ describe("Player Class", () => {
       const newPlayer = new Player({
         name: STD_NAME,
         color: STD_COLOR,
-        coordinates: STD_COORDS,
+        position: P1_STARTING_POS,
       });
       //Confirm initial position
-      expect(newPlayer.getCoordinates()).toBe(STD_COORDS);
+      expect(newPlayer.position).toBe(P1_STARTING_POS);
 
       newPlayer.move();
 
       //Confirm that the position did not change
-      expect(newPlayer.getCoordinates()).toBe(STD_COORDS);
+      expect(newPlayer.position).toBe(P1_STARTING_POS);
     });
 
     it("Direction == 'LEFT' adjusts the position properly", () => {
       const newPlayer = new Player({
         name: STD_NAME,
         color: STD_COLOR,
-        coordinates: STD_COORDS,
+        position: P1_STARTING_POS,
       });
       //Confirm initial position
-      expect(newPlayer.getCoordinates()).toBe(STD_COORDS);
+      expect(newPlayer.position).toBe(P1_STARTING_POS);
 
-      newPlayer.setDirection(Direction.LEFT); // Set the direction
+      newPlayer.direction = Direction.LEFT; // Set the direction
       newPlayer.move();
 
       //Confirm that the position changed properly
-      expect(newPlayer.getCoordinates()).toStrictEqual({
-        x: STD_COORDS.x - 5,
-        y: STD_COORDS.y,
+      expect(newPlayer.position).toStrictEqual({
+        colIdx: P1_STARTING_POS.colIdx - 1,
+        rowIdx: P1_STARTING_POS.rowIdx,
       });
     });
 
@@ -66,18 +63,18 @@ describe("Player Class", () => {
       const newPlayer = new Player({
         name: STD_NAME,
         color: STD_COLOR,
-        coordinates: STD_COORDS,
+        position: P1_STARTING_POS,
       });
       //Confirm initial position
-      expect(newPlayer.getCoordinates()).toBe(STD_COORDS);
+      expect(newPlayer.position).toBe(P1_STARTING_POS);
 
-      newPlayer.setDirection(Direction.RIGHT); // Set the direction
+      newPlayer.direction = Direction.RIGHT; // Set the direction
       newPlayer.move();
 
       //Confirm that the position changed properly
-      expect(newPlayer.getCoordinates()).toStrictEqual({
-        x: STD_COORDS.x + 5,
-        y: STD_COORDS.y,
+      expect(newPlayer.position).toStrictEqual({
+        colIdx: P1_STARTING_POS.colIdx + 1,
+        rowIdx: P1_STARTING_POS.rowIdx,
       });
     });
 
@@ -85,18 +82,18 @@ describe("Player Class", () => {
       const newPlayer = new Player({
         name: STD_NAME,
         color: STD_COLOR,
-        coordinates: STD_COORDS,
+        position: P1_STARTING_POS,
       });
       //Confirm initial position
-      expect(newPlayer.getCoordinates()).toBe(STD_COORDS);
+      expect(newPlayer.position).toBe(P1_STARTING_POS);
 
-      newPlayer.setDirection(Direction.UP); // Set the direction
+      newPlayer.direction = Direction.UP; // Set the direction
       newPlayer.move();
 
       //Confirm that the position did not change
-      expect(newPlayer.getCoordinates()).toStrictEqual({
-        x: STD_COORDS.x,
-        y: STD_COORDS.y - 5,
+      expect(newPlayer.position).toStrictEqual({
+        colIdx: P1_STARTING_POS.colIdx,
+        rowIdx: P1_STARTING_POS.rowIdx - 1,
       });
     });
 
@@ -104,18 +101,18 @@ describe("Player Class", () => {
       const newPlayer = new Player({
         name: STD_NAME,
         color: STD_COLOR,
-        coordinates: STD_COORDS,
+        position: P1_STARTING_POS,
       });
       //Confirm initial position
-      expect(newPlayer.getCoordinates()).toBe(STD_COORDS);
+      expect(newPlayer.position).toBe(P1_STARTING_POS);
 
-      newPlayer.setDirection(Direction.DOWN); // Set the direction
+      newPlayer.direction = Direction.DOWN; // Set the direction
       newPlayer.move();
 
       //Confirm that the position did not change
-      expect(newPlayer.getCoordinates()).toStrictEqual({
-        x: STD_COORDS.x,
-        y: STD_COORDS.y + 5,
+      expect(newPlayer.position).toStrictEqual({
+        colIdx: P1_STARTING_POS.colIdx,
+        rowIdx: P1_STARTING_POS.rowIdx + 1,
       });
     });
   });
