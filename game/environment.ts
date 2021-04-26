@@ -119,8 +119,7 @@ export const reset = (
   newGrid.setValue(1, p1.position);
   newGrid.setValue(1, p2.position);
 
-  // To prohibit memory issues, we dispose the tensor of the old board
-  grid.grid.dispose();
+  grid.reset();
 
   return newGrid;
 };
@@ -129,9 +128,13 @@ export const reset = (
  * @description Function to initiate the keydownListener for the game Input.
  * @param player1 - The first player.
  * @param player2 - The second player.
+ * @returns a reference to the event handler.
  */
-export const keydownListener = (player1: Player, player2: Player): void => {
-  document.addEventListener("keydown", (event) => {
+export const keydownListener = (
+  player1: Player,
+  player2: Player
+): ((event: KeyboardEvent) => void) => {
+  const keyDownHandler = (event: KeyboardEvent) => {
     if (event.isComposing || event.keyCode === 229) {
       return;
     }
@@ -180,7 +183,10 @@ export const keydownListener = (player1: Player, player2: Player): void => {
         }
         break;
     }
-  });
+  };
+  document.addEventListener("keydown", keyDownHandler);
+
+  return keyDownHandler;
 };
 
 /**

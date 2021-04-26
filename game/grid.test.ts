@@ -6,11 +6,9 @@ const NUM_COLS = 3;
 const CELL_HEIGHT = 10;
 const CELL_WIDTH = 10;
 
-describe("Grid Class", () => {
-  beforeAll(async () => {
-    await tf.setBackend("cpu");
-  });
+tf.setBackend("cpu");
 
+describe("Grid Class", () => {
   describe("instantiation", () => {
     it("instantiates properly", () => {
       const grid = new Grid({

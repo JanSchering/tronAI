@@ -73,6 +73,14 @@ export class Grid {
   public get gridAsArray(): number[] {
     return Array.from(this._grid.dataSync());
   }
+
+  /**
+   * @description Reset the Grid to a clean state.
+   */
+  public reset(): void {
+    this._grid.dispose();
+    this._grid = tf.zeros([this._numRows, this._numCols]);
+  }
 }
 
 type GridProps = {
