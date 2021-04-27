@@ -1,6 +1,12 @@
 import * as tf from "@tensorflow/tfjs";
-import { isNeon, keydownListener, reset } from "./environment";
-import { Direction, Standard_Color } from "./types";
+import {
+  healthCheckup,
+  isNeon,
+  keydownListener,
+  reset,
+  step,
+} from "./environment";
+import { Direction, GridCell, Standard_Color } from "./types";
 import { Player } from "./player";
 import { Grid } from "./grid";
 import { NEON_RED, P1_STARTING_POS, P2_STARTING_POS } from "./literals";
@@ -8,6 +14,31 @@ import { NEON_RED, P1_STARTING_POS, P2_STARTING_POS } from "./literals";
 tf.setBackend("cpu");
 
 describe("Environment Functions", () => {
+  let player1: Player;
+  let player2: Player;
+  let grid: Grid;
+
+  beforeEach(() => {
+    player1 = new Player({
+      name: "p1",
+      color: Standard_Color.BLUE,
+      position: P1_STARTING_POS,
+    });
+
+    player2 = new Player({
+      name: "p2",
+      color: Standard_Color.RED,
+      position: P2_STARTING_POS,
+    });
+
+    grid = new Grid({
+      numRows: 100,
+      numCols: 25,
+      cellHeight: 10,
+      cellWidth: 10,
+    });
+  });
+
   describe("isNeon", () => {
     it("recognizes when a color is not Neon", () => {
       expect(isNeon(Standard_Color.BLUE)).toBeFalsy();
@@ -19,18 +50,6 @@ describe("Environment Functions", () => {
   });
 
   describe("keydownListener", () => {
-    const player1 = new Player({
-      name: "p1",
-      color: Standard_Color.BLUE,
-      position: P1_STARTING_POS,
-    });
-
-    const player2 = new Player({
-      name: "p2",
-      color: Standard_Color.RED,
-      position: P2_STARTING_POS,
-    });
-
     let handler: (event: KeyboardEvent) => void;
 
     beforeEach(() => {
@@ -128,23 +147,6 @@ describe("Environment Functions", () => {
   });
 
   describe("reset", () => {
-    const player1 = new Player({
-      name: "p1",
-      color: Standard_Color.BLUE,
-      position: P1_STARTING_POS,
-    });
-
-    const player2 = new Player({
-      name: "p2",
-      color: Standard_Color.RED,
-      position: P2_STARTING_POS,
-    });
-    const grid = new Grid({
-      numRows: 3,
-      numCols: 3,
-      cellHeight: 10,
-      cellWidth: 10,
-    });
     const testCanvas = document.createElement("canvas");
     const ctx = testCanvas.getContext("2d");
     it("resets the game environment to a starting state", () => {
@@ -163,6 +165,56 @@ describe("Environment Functions", () => {
       expect(player2.direction).toBe(Direction.NONE);
       expect(player1.position).toBe(P1_STARTING_POS);
       expect(player2.position).toBe(P2_STARTING_POS);
+    });
+  });
+
+  describe("healthCheckup", () => {
+    it("Indicates if the current position of a player is terminal, according to the current playfield", () => {
+      expect(healthCheckup(player1, grid)).toBeTruthy();
+      expect(player1.alive).toBeTruthy();
+
+      const colIdx = 0;
+      const rowIdx = 0;
+      grid.setValue(1, { rowIdx, colIdx });
+      player1.direction = Direction.LEFT;
+      player1.position = { rowIdx, colIdx };
+
+      expect(healthCheckup(player1, grid)).toBeFalsy();
+      expect(player1.alive).toBeFalsy();
+    });
+  });
+
+  describe("step", () => {
+    it("moves the playfield one time-step forward (no directions set)", () => {
+      step(player1, player2, grid);
+      expect(player1.position).toBe(P1_STARTING_POS);
+      expect(player2.position).toBe(P2_STARTING_POS);
+      expect(player1.alive).toBeTruthy();
+      expect(player2.alive).toBeTruthy();
+      expect(grid.isCellFilled(player1.position)).toBeTruthy();
+      expect(grid.isCellFilled(player2.position)).toBeTruthy();
+    });
+    it("moves the playfield one time-step forward (players have directions)", () => {
+      player1.direction = Direction.RIGHT;
+      player2.direction = Direction.LEFT;
+
+      const p1NewPos: GridCell = {
+        ...P1_STARTING_POS,
+        colIdx: P1_STARTING_POS.colIdx + 1,
+      };
+      const p2NewPos: GridCell = {
+        ...P2_STARTING_POS,
+        colIdx: P2_STARTING_POS.colIdx - 1,
+      };
+
+      step(player1, player2, grid);
+
+      expect(player1.position).toStrictEqual(p1NewPos);
+      expect(player2.position).toStrictEqual(p2NewPos);
+      expect(player1.alive).toBeTruthy();
+      expect(player2.alive).toBeTruthy();
+      expect(grid.isCellFilled(p1NewPos)).toBeTruthy();
+      expect(grid.isCellFilled(p2NewPos)).toBeTruthy();
     });
   });
 });

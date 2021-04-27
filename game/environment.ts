@@ -21,8 +21,8 @@ import { Grid } from "./grid";
 export const step = (player1: Player, player2: Player, grid: Grid): void => {
   player1.move();
   player2.move();
-  player1.alive = healthCheckup(player1, grid);
-  player2.alive = healthCheckup(player2, grid);
+  healthCheckup(player1, grid);
+  healthCheckup(player2, grid);
   grid.setValue(1, player1.position);
   grid.setValue(1, player2.position);
 };
@@ -44,6 +44,7 @@ export const healthCheckup = (player: Player, grid: Grid): boolean => {
       colIdx >= 0 &&
       colIdx < grid.numCols;
   }
+  player.alive = alive;
   return alive;
 };
 
