@@ -1,5 +1,5 @@
 import * as tf from "@tensorflow/tfjs";
-import { getRandomInt } from "./utils";
+import { getRandomInt } from "./helpers";
 
 type MemoryObject = {
   state: tf.Tensor1D;

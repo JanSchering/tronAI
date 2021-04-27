@@ -4,7 +4,7 @@ import { Player } from "../game/player";
 import { Direction } from "../game/types";
 import { NUM_ACTIONS, NUM_INPUTS, NUM_OUTPUTS } from "./model_constants";
 import { Memory, sampleFromMemory } from "./model_memory";
-import { getRandomInt } from "./utils";
+import { getRandomInt } from "./helpers";
 
 /**
  * @description let a model pick an action to take for the provided state of the environment.
