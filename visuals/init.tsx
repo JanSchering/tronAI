@@ -10,7 +10,7 @@ import IntroImg from "./images/tronImage_polished.jpeg";
 import styles from "../style/app.module.scss";
 import { AISetup } from "./aiSetup";
 import { PlayerSetup } from "./playerSetup";
-import { Color } from "../game/types";
+import { Color, GAME_MODE } from "../game/types";
 import { NEON_RED, NEON_BLUE } from "../game/literals";
 
 export const InitialForm = ({
@@ -29,7 +29,7 @@ export const InitialForm = ({
   const [nameP2, setNameP2] = React.useState("");
   const [aiSetupToggled, setAiSetupToggled] = React.useState(false);
   const [playerSetupToggled, setPlayerSetupToggled] = React.useState(true);
-  const [aiEnabled, setAiEnabled] = React.useState(false);
+  const [mode, setMode] = React.useState(GAME_MODE.LOCAL_COOP);
 
   const handlePlayerToggle = () => {
     if (!playerSetupToggled) setAiSetupToggled(false);
@@ -52,6 +52,7 @@ export const InitialForm = ({
         color: colorP2,
         name: nameP2,
       },
+      mode,
     });
   };
 
@@ -75,14 +76,18 @@ export const InitialForm = ({
                         id={`ai-checkbox`}
                         label={`Local Multiplayer`}
                         className={styles.vert_20}
-                        checked={!aiEnabled}
-                        onChange={() => setAiEnabled(false)}
+                        checked={mode === GAME_MODE.LOCAL_COOP}
+                        onChange={() => setMode(GAME_MODE.LOCAL_COOP)}
                       />
                     </Col>
                     <Col xs={5}>
                       <Accordion.Toggle
                         as={Button}
-                        variant={!aiEnabled ? "primary" : "secondary"}
+                        variant={
+                          mode === GAME_MODE.LOCAL_COOP
+                            ? "primary"
+                            : "secondary"
+                        }
                         eventKey="0"
                         onClick={handlePlayerToggle}
                       >
@@ -111,14 +116,18 @@ export const InitialForm = ({
                         id={`ai-checkbox`}
                         label={`AI Mode`}
                         className={styles.vert_20}
-                        checked={aiEnabled}
-                        onChange={() => setAiEnabled(true)}
+                        checked={mode === GAME_MODE.AI_TRAINING}
+                        onChange={() => setMode(GAME_MODE.AI_TRAINING)}
                       />
                     </Col>
                     <Col xs={5}>
                       <Accordion.Toggle
                         as={Button}
-                        variant={aiEnabled ? "primary" : "secondary"}
+                        variant={
+                          mode === GAME_MODE.AI_TRAINING
+                            ? "primary"
+                            : "secondary"
+                        }
                         eventKey="1"
                         onClick={handleAIToggle}
                       >
@@ -148,6 +157,17 @@ export const InitialForm = ({
 };
 
 type Props = {
-  doneCallback: Function;
+  doneCallback: (response: SetupResponse) => void;
   children?: React.ReactChildren;
+};
+
+type PlayerFormFields = {
+  name: string;
+  color: Color;
+};
+
+type SetupResponse = {
+  p1: PlayerFormFields;
+  p2: PlayerFormFields;
+  mode: GAME_MODE;
 };

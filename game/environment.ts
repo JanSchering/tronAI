@@ -38,11 +38,11 @@ export const healthCheckup = (player: Player, grid: Grid): boolean => {
   if (player.direction !== Direction.NONE) {
     const { rowIdx, colIdx } = player.position;
     alive =
-      !grid.isCellFilled(player.position) &&
       rowIdx >= 0 &&
       rowIdx < grid.numRows &&
       colIdx >= 0 &&
-      colIdx < grid.numCols;
+      colIdx < grid.numCols &&
+      !grid.isCellFilled(player.position);
   }
   player.alive = alive;
   return alive;

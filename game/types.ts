@@ -21,6 +21,11 @@ export enum Direction {
   NONE = 4,
 }
 
+export enum GAME_MODE {
+  AI_TRAINING,
+  LOCAL_COOP,
+}
+
 export type Coordinate = {
   x: number;
   y: number;
