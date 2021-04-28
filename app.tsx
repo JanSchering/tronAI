@@ -19,7 +19,7 @@ import {
   reset,
   keydownListener,
 } from "./game/environment";
-import { runAITrainingMode } from "./AI_v2/runner";
+import { runAITrainingMode } from "./AI/runner";
 import { ScoreBoard } from "./visuals/scoreBoard";
 import "./style/global.scss";
 import styles from "./style/app.module.scss";
