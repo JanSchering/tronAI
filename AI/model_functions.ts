@@ -92,11 +92,7 @@ export const replayExperience = async (props: TrainingProps) => {
   });
   await model.fit(
     tf.tensor2d(x, [batch.length, NUM_INPUTS]),
-    tf.tensor2d(y, [batch.length, NUM_OUTPUTS]),
-    {
-      batchSize: batch.length,
-      epochs: 3,
-    }
+    tf.tensor2d(y, [batch.length, NUM_OUTPUTS])
   );
 };
 
