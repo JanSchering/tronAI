@@ -1,4 +1,4 @@
-import { NUM_ACTIONS } from "./model_constants";
+import { NUM_ACTIONS, NUM_INPUTS } from "./model_constants";
 import * as tf from "@tensorflow/tfjs";
 import { Player } from "../game/player";
 import { Direction } from "../game/types";
@@ -10,7 +10,7 @@ import { Grid } from "../game/grid";
 export const getStateTensor = (props: Props): tf.Tensor1D => {
   const { player1, player2, grid } = props;
 
-  const state: number[] = [];
+  let state: number[] = [];
 
   /*
    * To build up the state Tensor, the first thing we do is signal the current direction of both Players.
@@ -21,8 +21,8 @@ export const getStateTensor = (props: Props): tf.Tensor1D => {
   const p2Actions = Array.from(tf.zeros([NUM_ACTIONS]).dataSync());
   if (player2.direction !== Direction.NONE) p1Actions[player2.direction] = 1;
 
-  state.concat(p1Actions);
-  state.concat(p2Actions);
+  state = state.concat(p1Actions);
+  state = state.concat(p2Actions);
 
   /*
    * After signaling the current direction in the Tensor, it makes sense to also provide the current position
@@ -41,7 +41,7 @@ export const getStateTensor = (props: Props): tf.Tensor1D => {
   /**
    * Finally, we have to provide an overview over the state of the board and return the complete overview as a tf Tensor.
    */
-  return tf.tensor1d(state.concat(grid.gridAsArray));
+  return tf.tensor(state.concat(grid.gridAsArray)).reshape([1, NUM_INPUTS]);
 };
 
 type Props = {

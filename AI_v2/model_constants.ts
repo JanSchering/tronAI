@@ -23,10 +23,9 @@ const NUM_POSITION_INDICE = 4;
  * TODO: Do the coordinates and direction have to be normalized? Seeing as they would be the only inputs > 1.
  */
 const NUM_INPUTS =
-  CANVAS_WIDTH / PLAYER_WIDTH +
-  CANVAS_HEIGHT / PLAYER_HEIGHT +
+  (CANVAS_WIDTH / PLAYER_WIDTH) * (CANVAS_HEIGHT / PLAYER_HEIGHT) +
   NUM_ACTIONS * 2 +
-  NUM_POSITION_INDICE * 2;
+  NUM_POSITION_INDICE;
 
 /**
  * For now, the number of outputs will just be the number of actions.

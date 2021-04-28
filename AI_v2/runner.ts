@@ -26,7 +26,7 @@ import { getStateTensor } from "./state";
  * TODO: Do we need two models or is it actually better to have just
  * one model and have it play against itself?
  */
-const runAITrainingMode = async (props: AIModeProps) => {
+export const runAITrainingMode = async (props: AIModeProps) => {
   const { numGames, maxStepsPerGame, ctx } = props;
   const p1Model: tf.Sequential = createModel();
   const p2Model: tf.Sequential = createModel();
@@ -122,7 +122,7 @@ const runAITrainingMode = async (props: AIModeProps) => {
           reward: p2Reward,
           nextState,
         });
-
+        current_step++;
         state = nextState;
         renderPlayers([player1, player2], ctx, grid);
       }

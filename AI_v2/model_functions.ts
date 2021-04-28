@@ -51,8 +51,8 @@ export const replayExperience = async (props: TrainingProps) => {
 
   // We create arrays to gather the input-states and calculated labels/outputs,
   // So that we can fit the model parameters to the collected data.
-  let x: Array<Array<number>> = [];
-  let y: Array<Array<number>> = [];
+  let x: number[] = [];
+  let y: number[] = [];
 
   /*
    * For each Sample in the batch, we want to update the Q-Values:
@@ -67,7 +67,7 @@ export const replayExperience = async (props: TrainingProps) => {
   batch.forEach((sample) => {
     const { state, nextState, action, reward } = sample;
     // We let the model predict the rewards of the current state.
-    const current_Q: any = model.predict(state);
+    const current_Q: tf.Tensor = <tf.Tensor>model.predict(state);
 
     // We also let the model predict the rewards for the next state, if there was a next state in the game.
     let future_reward = tf.zeros([NUM_ACTIONS]);
@@ -81,31 +81,23 @@ export const replayExperience = async (props: TrainingProps) => {
      * and what happened afterwards. We can update the Q-Value for that particular combination of state and action.
      * To approximate the future reward that this course of action generates, we add the highest prediction of the next state.
      */
-    current_Q[action] =
+    let totalValue =
       reward + discountFactor * future_reward.max().dataSync()[0];
+    current_Q.bufferSync().set(totalValue, 0, action);
 
     // We can now push the state to the input collector
-    x.push(Array.from(state.dataSync()));
+    x = x.concat(Array.from(state.dataSync()));
     // For the labels/outputs, we push the updated Q values
-    y.push(Array.from(current_Q.dataSync()));
-
-    // at the end we have to take care of disposing of the created Tensors
-    current_Q.dispose();
-    future_reward.dispose();
+    y = y.concat(Array.from(current_Q.dataSync()));
   });
-
-  /*
-   * Having updated the Q-Values and gathered all input/output pairs of the batch,
-   * We can reshape the collectors and prepare them for training the model.
-   */
-  const inputs = tf.tensor2d(x, [x.length, NUM_INPUTS]);
-  const labels = tf.tensor2d(y, [y.length, NUM_OUTPUTS]);
-
-  // Use the inputs and labels to train the model
-  await model.trainOnBatch(inputs, labels);
-
-  inputs.dispose();
-  labels.dispose();
+  await model.fit(
+    tf.tensor2d(x, [batch.length, NUM_INPUTS]),
+    tf.tensor2d(y, [batch.length, NUM_OUTPUTS]),
+    {
+      batchSize: batch.length,
+      epochs: 3,
+    }
+  );
 };
 
 /**

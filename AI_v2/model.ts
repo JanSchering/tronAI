@@ -20,7 +20,7 @@ export const createModel = (): tf.Sequential => {
   model.add(
     tf.layers.dense({
       units: LAYER_1_UNITS,
-      inputShape: [NUM_INPUTS],
+      batchInputShape: [null, NUM_INPUTS],
       activation: "relu",
     })
   );
@@ -35,13 +35,15 @@ export const createModel = (): tf.Sequential => {
   model.add(tf.layers.dense({ units: LAYER_4_UNITS, activation: "relu" }));
 
   // Defining the output Layer of the model
-  model.add(tf.layers.dense({ units: NUM_OUTPUTS, activation: "softmax" }));
+  model.add(tf.layers.dense({ units: NUM_OUTPUTS, activation: "relu" }));
 
   model.compile({
     optimizer: tf.train.adam(),
     loss: "sparseCategoricalCrossentropy",
     metrics: "accuracy",
   });
+
+  console.warn(model);
 
   return model;
 };

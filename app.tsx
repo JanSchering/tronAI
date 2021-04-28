@@ -1,13 +1,7 @@
 import * as React from "react";
 import { render } from "react-dom";
 import { Player } from "./game/player";
-import {
-  Color,
-  Direction,
-  GAME_MODE,
-  GridCell,
-  Standard_Color,
-} from "./game/types";
+import { GAME_MODE, Standard_Color } from "./game/types";
 import { Grid } from "./game/grid";
 import {
   P1_STARTING_POS,
@@ -25,6 +19,7 @@ import {
   reset,
   keydownListener,
 } from "./game/environment";
+import { runAITrainingMode } from "./AI_v2/runner";
 import { ScoreBoard } from "./visuals/scoreBoard";
 import "./style/global.scss";
 import styles from "./style/app.module.scss";
@@ -102,8 +97,6 @@ export const Main: React.FC = React.memo(
       }, 40);
     };
 
-    const runAITraining = () => {};
-
     React.useEffect(() => {
       if (setupDone && ctx) {
         switch (mode) {
@@ -111,7 +104,11 @@ export const Main: React.FC = React.memo(
             runLocalCoop();
             break;
           case GAME_MODE.AI_TRAINING:
-            runAITraining();
+            runAITrainingMode({
+              numGames: 10,
+              maxStepsPerGame: 1000,
+              ctx,
+            });
         }
       }
     }, [setupDone, p1Score, p2Score]);
