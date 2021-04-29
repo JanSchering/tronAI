@@ -100,14 +100,4 @@ var tronGameConfig = Object.assign({}, config, {
   },
 });
 
-var tronAIConfig = Object.assign({}, config, {
-  entry: {
-    index: path.resolve(__dirname, "AI", "app.ts"),
-  },
-  output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "bundle.js",
-  },
-});
-
 module.exports = [tronGameConfig];
