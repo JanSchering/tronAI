@@ -4,6 +4,7 @@ import { AddressInfo } from "node:net";
 import * as WebSocket from "ws";
 
 const app = express();
+const registry: RegisteredClient[] = [];
 
 app.get("/home", () => {
   console.log("test");
@@ -27,25 +28,16 @@ wss.on("connection", (ws: ExtWebSocket) => {
     ws.isAlive = true;
   });
 
-  //connection is up, let's add a simple simple event
-  ws.on("message", (message: string) => {
-    //log the received message and send it back to the client
-    console.log("received: %s", message);
+  ws.on("message", (message: string) => toEvent(message, ws));
 
-    const broadcastRegex = /^broadcast\:/;
+  ws.on("register", (name: string) => {
+    registry.push({ name, client: ws });
+  });
 
-    if (broadcastRegex.test(message)) {
-      message = message.replace(broadcastRegex, "");
-
-      //send back the message to the other clients
-      wss.clients.forEach((client) => {
-        if (client != ws) {
-          client.send(`Hello, broadcast message -> ${message}`);
-        }
-      });
-    } else {
-      ws.send(`Hello, you sent -> ${message}`);
-    }
+  ws.on("list", () => {
+    const names = registry.map((regObj) => regObj.name);
+    console.log(names);
+    ws.send(JSON.stringify(names));
   });
 
   setInterval(() => {
@@ -68,6 +60,21 @@ server.listen(process.env.PORT || 8999, () => {
   );
 });
 
+const toEvent = (message: string, client: ExtWebSocket) => {
+  try {
+    var event = JSON.parse(message);
+    console.log(event.type);
+    client.emit(event.type, event.payload);
+  } catch (err) {
+    console.log("not an event", err);
+  }
+};
+
 export interface ExtWebSocket extends WebSocket {
   isAlive: boolean;
 }
+
+type RegisteredClient = {
+  name: string;
+  client: ExtWebSocket;
+};
