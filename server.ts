@@ -37,7 +37,7 @@ wss.on("connection", (ws: ExtWebSocket) => {
   ws.on("list", () => {
     const names = registry.map((regObj) => regObj.name);
     console.log(names);
-    ws.send(JSON.stringify(names));
+    ws.send(JSON.stringify({ type: "list", names }));
   });
 
   setInterval(() => {
@@ -70,7 +70,7 @@ const toEvent = (message: string, client: ExtWebSocket) => {
   }
 };
 
-export interface ExtWebSocket extends WebSocket {
+interface ExtWebSocket extends WebSocket {
   isAlive: boolean;
 }
 

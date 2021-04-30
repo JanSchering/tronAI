@@ -27,7 +27,7 @@ import Container from "react-bootstrap/Container";
 export const Main: React.FC<Props> = (props: Props): React.ReactElement => {
   const [setupResponse, setSetupResponse] = React.useState(null);
   const [setupDone, setSetupDone] = React.useState(false);
-  const [mode, setMode] = React.useState(GAME_MODE.LOCAL_COOP);
+  const [mode, setMode] = React.useState(GAME_MODE.LOCAL_MULTI);
   const [ctx, setCtx] = React.useState(null);
   const [p1Score, setP1Score] = React.useState(0);
   const [p2Score, setP2Score] = React.useState(0);
@@ -98,7 +98,7 @@ export const Main: React.FC<Props> = (props: Props): React.ReactElement => {
   React.useEffect(() => {
     if (setupDone && ctx) {
       switch (mode) {
-        case GAME_MODE.LOCAL_COOP:
+        case GAME_MODE.LOCAL_MULTI:
           runLocalCoop();
           break;
         case GAME_MODE.AI_TRAINING:
@@ -125,7 +125,7 @@ export const Main: React.FC<Props> = (props: Props): React.ReactElement => {
     </Container>
   ) : (
     <Container className={styles.app_container}>
-      <InitialForm doneCallback={setSetupResponse} />
+      <InitialForm doneCallback={setSetupResponse} ws={props.ws} />
     </Container>
   );
 };

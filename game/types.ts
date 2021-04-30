@@ -23,7 +23,8 @@ export enum Direction {
 
 export enum GAME_MODE {
   AI_TRAINING,
-  LOCAL_COOP,
+  LOCAL_MULTI,
+  ONLINE_MULTI,
 }
 
 export type Coordinate = {

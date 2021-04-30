@@ -10,12 +10,14 @@ import IntroImg from "./images/tronImage_polished.jpeg";
 import styles from "../style/app.module.scss";
 import { AISetup } from "./aiSetup";
 import { PlayerSetup } from "./playerSetup";
+import { LobbySetup } from "./lobbySetup";
 import { Color, GAME_MODE } from "../../game/types";
 import { NEON_RED, NEON_BLUE } from "../../game/literals";
 
 export const InitialForm = ({
   doneCallback,
   children,
+  ws,
 }: Props): React.ReactElement => {
   const [colorP1, setColorP1]: [
     Color,
@@ -29,7 +31,7 @@ export const InitialForm = ({
   const [nameP2, setNameP2] = React.useState("");
   const [aiSetupToggled, setAiSetupToggled] = React.useState(false);
   const [playerSetupToggled, setPlayerSetupToggled] = React.useState(true);
-  const [mode, setMode] = React.useState(GAME_MODE.LOCAL_COOP);
+  const [mode, setMode] = React.useState(GAME_MODE.LOCAL_MULTI);
 
   const handlePlayerToggle = () => {
     if (!playerSetupToggled) setAiSetupToggled(false);
@@ -73,25 +75,24 @@ export const InitialForm = ({
                     <Col xs={5}>
                       <Form.Check
                         type={"radio"}
-                        id={`ai-checkbox`}
                         label={`Local Multiplayer`}
                         className={styles.vert_20}
-                        checked={mode === GAME_MODE.LOCAL_COOP}
-                        onChange={() => setMode(GAME_MODE.LOCAL_COOP)}
+                        checked={mode === GAME_MODE.LOCAL_MULTI}
+                        onChange={() => setMode(GAME_MODE.LOCAL_MULTI)}
                       />
                     </Col>
                     <Col xs={5}>
                       <Accordion.Toggle
                         as={Button}
                         variant={
-                          mode === GAME_MODE.LOCAL_COOP
+                          mode === GAME_MODE.LOCAL_MULTI
                             ? "primary"
                             : "secondary"
                         }
                         eventKey="0"
-                        onClick={handlePlayerToggle}
                       >
-                        Player Setup {playerSetupToggled ? "▼" : "►"}
+                        Player Setup
+                        {mode === GAME_MODE.LOCAL_MULTI ? "▼" : "►"}
                       </Accordion.Toggle>
                     </Col>
                   </Row>
@@ -113,7 +114,38 @@ export const InitialForm = ({
                     <Col xs={5}>
                       <Form.Check
                         type={"radio"}
-                        id={`ai-checkbox`}
+                        label={`Online Multiplayer`}
+                        className={styles.vert_20}
+                        checked={mode === GAME_MODE.ONLINE_MULTI}
+                        onChange={() => setMode(GAME_MODE.ONLINE_MULTI)}
+                      />
+                    </Col>
+                    <Col xs={5}>
+                      <Accordion.Toggle
+                        as={Button}
+                        variant={
+                          mode === GAME_MODE.ONLINE_MULTI
+                            ? "primary"
+                            : "secondary"
+                        }
+                        eventKey="1"
+                      >
+                        Lobby Setup
+                        {mode === GAME_MODE.ONLINE_MULTI ? "▼" : "►"}
+                      </Accordion.Toggle>
+                    </Col>
+                  </Row>
+                </Card.Header>
+                <Accordion.Collapse eventKey="1">
+                  <LobbySetup ws={ws} />
+                </Accordion.Collapse>
+              </Card>
+              <Card bg="dark" text="light">
+                <Card.Header>
+                  <Row>
+                    <Col xs={5}>
+                      <Form.Check
+                        type={"radio"}
                         label={`AI Mode`}
                         className={styles.vert_20}
                         checked={mode === GAME_MODE.AI_TRAINING}
@@ -128,15 +160,14 @@ export const InitialForm = ({
                             ? "primary"
                             : "secondary"
                         }
-                        eventKey="1"
-                        onClick={handleAIToggle}
+                        eventKey="2"
                       >
-                        AI Setup {aiSetupToggled ? "▼" : "►"}
+                        AI Setup {mode === GAME_MODE.AI_TRAINING ? "▼" : "►"}
                       </Accordion.Toggle>
                     </Col>
                   </Row>
                 </Card.Header>
-                <Accordion.Collapse eventKey="1">
+                <Accordion.Collapse eventKey="2">
                   <AISetup />
                 </Accordion.Collapse>
               </Card>
@@ -159,6 +190,7 @@ export const InitialForm = ({
 type Props = {
   doneCallback: (response: SetupResponse) => void;
   children?: React.ReactChildren;
+  ws: WebSocket;
 };
 
 type PlayerFormFields = {

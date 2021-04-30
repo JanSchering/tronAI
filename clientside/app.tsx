@@ -6,14 +6,14 @@ const App: React.FC<any> = (): React.ReactElement => {
   const [ws, setWs]: [WebSocket, (ws: WebSocket) => any] = React.useState(null);
   const [internalTimeout, setInternalTimeout] = React.useState(250); // Initial timeout duration.
 
-  // single websocket instance for the own application and constantly trying to reconnect.
+  // single websocket instance for the client. Constantly trying to reconnect in case of lost connection.
   React.useEffect(() => {
     connect();
   }, [internalTimeout]);
 
   /**
    * @description Establishes connection with the websocket.
-   * and also ensures constant reconnection if connection closes
+   * Also ensures constant reconnection if connection closes
    */
   const connect = () => {
     var ws = new WebSocket("ws://localhost:8999/");
@@ -29,7 +29,6 @@ const App: React.FC<any> = (): React.ReactElement => {
       clearTimeout(connectInterval); // clear Interval on open of websocket connection
     };
 
-    // websocket onclose event listener
     ws.onclose = (e) => {
       console.log(
         `Socket is closed. Reconnect will be attempted in ${Math.min(
@@ -43,7 +42,6 @@ const App: React.FC<any> = (): React.ReactElement => {
       connectInterval = setTimeout(check, Math.min(10000, internalTimeout)); //call check function after timeout
     };
 
-    // websocket onerror event listener
     ws.onerror = (err) => {
       console.error("Socket encountered error: ", err, "Closing socket");
 
