@@ -8,9 +8,9 @@ import Popover from "react-bootstrap/Popover";
 import Image from "react-bootstrap/Image";
 
 import { ColorPicker } from "./colorPicker";
-import { Color, Standard_Color } from "../game/types";
-import { NEON_RED, NEON_BLUE, NEON_GREEN, NEON_YELLOW } from "../game/literals";
-import { isNeon } from "../game/environment";
+import { Color, Standard_Color } from "../../game/types";
+import { NEON_RED, NEON_BLUE, NEON_GREEN, NEON_YELLOW } from "../../game/literals";
+import { isNeon } from "../../game/environment";
 
 import Neon_Red_Img from "./images/neon_red.png";
 import Neon_Blue_Img from "./images/neon_blue.png";

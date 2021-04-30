@@ -1,7 +1,6 @@
-import * as WebSocket from "ws";
 import * as React from "react";
 import { render } from "react-dom";
-import { Main } from "./home";
+import { Main } from "./visuals/home";
 
 const App: React.FC<any> = (): React.ReactElement => {
   const [ws, setWs]: [WebSocket, (ws: WebSocket) => any] = React.useState(null);
@@ -10,14 +9,14 @@ const App: React.FC<any> = (): React.ReactElement => {
   // single websocket instance for the own application and constantly trying to reconnect.
   React.useEffect(() => {
     connect();
-  }, []);
+  }, [internalTimeout]);
 
   /**
    * @description Establishes connection with the websocket.
    * and also ensures constant reconnection if connection closes
    */
   const connect = () => {
-    var ws = new WebSocket("ws://localhost:3000/ws");
+    var ws = new WebSocket("ws://localhost:8999/");
     var connectInterval: any;
 
     // websocket onopen event listener
@@ -46,11 +45,7 @@ const App: React.FC<any> = (): React.ReactElement => {
 
     // websocket onerror event listener
     ws.onerror = (err) => {
-      console.error(
-        "Socket encountered error: ",
-        err.message,
-        "Closing socket"
-      );
+      console.error("Socket encountered error: ", err, "Closing socket");
 
       ws.close();
     };

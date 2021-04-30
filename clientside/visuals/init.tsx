@@ -10,8 +10,8 @@ import IntroImg from "./images/tronImage_polished.jpeg";
 import styles from "../style/app.module.scss";
 import { AISetup } from "./aiSetup";
 import { PlayerSetup } from "./playerSetup";
-import { Color, GAME_MODE } from "../game/types";
-import { NEON_RED, NEON_BLUE } from "../game/literals";
+import { Color, GAME_MODE } from "../../game/types";
+import { NEON_RED, NEON_BLUE } from "../../game/literals";
 
 export const InitialForm = ({
   doneCallback,

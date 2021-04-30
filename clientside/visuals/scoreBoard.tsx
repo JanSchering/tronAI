@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Player } from "../game/player";
+import { Player } from "../../game/player";
 
 export const ScoreBoard = ({ p1, p2 }: Props): React.ReactElement => {
   return (

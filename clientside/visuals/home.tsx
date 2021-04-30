@@ -1,7 +1,7 @@
 import * as React from "react";
-import { Player } from "./game/player";
-import { GAME_MODE, Standard_Color } from "./game/types";
-import { Grid } from "./game/grid";
+import { Player } from "../../game/player";
+import { GAME_MODE, Standard_Color } from "../../game/types";
+import { Grid } from "../../game/grid";
 import {
   P1_STARTING_POS,
   P2_STARTING_POS,
@@ -9,19 +9,19 @@ import {
   PLAYER_WIDTH,
   CANVAS_HEIGHT,
   CANVAS_WIDTH,
-} from "./game/literals";
-import { Canvas, useCanvas } from "./visuals/canvas";
-import { InitialForm } from "./visuals/init";
+} from "../../game/literals";
+import { Canvas, useCanvas } from "./canvas";
+import { InitialForm } from "./init";
 import {
   step,
   renderPlayers,
   reset,
   keydownListener,
-} from "./game/environment";
-import { runAITrainingMode } from "./AI/runner";
-import { ScoreBoard } from "./visuals/scoreBoard";
-import "./style/global.scss";
-import styles from "./style/app.module.scss";
+} from "../../game/environment";
+import { runAITrainingMode } from "../../AI/runner";
+import { ScoreBoard } from "./scoreBoard";
+import "../style/global.scss";
+import styles from "../style/app.module.scss";
 import Container from "react-bootstrap/Container";
 
 export const Main: React.FC<Props> = (props: Props): React.ReactElement => {
