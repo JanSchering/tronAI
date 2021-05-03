@@ -92,7 +92,7 @@ var config = {
 
 var tronGameConfig = Object.assign({}, config, {
   entry: {
-    index: path.resolve(__dirname, "clientside", "app.tsx"),
+    index: path.resolve(__dirname, "clientside", "appV2.tsx"),
   },
   output: {
     path: path.resolve(__dirname, "dist"),

@@ -31,3 +31,17 @@
 .no_padding {
   padding: 0% !important;
 }
+
+.play_button {
+  position: absolute;
+  top: 45%;
+  left: 55%;
+  font-size: xx-large;
+  font-family: system-ui;
+  color: black;
+}
+
+.mode_list_item {
+  display: flex;
+  align-self: center;
+}

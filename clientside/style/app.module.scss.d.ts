@@ -5,7 +5,9 @@ interface CssExports {
   'center_col': string;
   'center_relative': string;
   'init_btn_center': string;
+  'mode_list_item': string;
   'no_padding': string;
+  'play_button': string;
   'sep_xs': string;
   'top_buffer': string;
   'vert_20': string;

@@ -24,7 +24,6 @@ const App: React.FC<any> = (): React.ReactElement => {
       console.log("connected websocket main component");
 
       setWs(ws);
-      setInternalTimeout(250);
 
       clearTimeout(connectInterval); // clear Interval on open of websocket connection
     };
@@ -38,7 +37,6 @@ const App: React.FC<any> = (): React.ReactElement => {
         e.reason
       );
 
-      setInternalTimeout(internalTimeout * 2); //increment retry interval
       connectInterval = setTimeout(check, Math.min(10000, internalTimeout)); //call check function after timeout
     };
 

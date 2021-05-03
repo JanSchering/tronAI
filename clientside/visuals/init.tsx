@@ -5,7 +5,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
-import IntroImg from "./images/tronImage_polished.jpeg";
+import IntroImg from "../images/tron_polished.jpg";
 
 import styles from "../style/app.module.scss";
 import { AISetup } from "./aiSetup";
