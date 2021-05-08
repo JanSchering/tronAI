@@ -9,7 +9,7 @@ import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image";
 
 import { CenteredStaticModal } from "../centeredStaticModal";
-import { WaitWithSpinner } from "../waitWithSpinner";
+import { WaitWithSpinner } from "./waitWithSpinner";
 
 import Neon_Blue_Img from "../../images/neon_blue.png";
 import Neon_Red_Img from "../../images/neon_red.png";

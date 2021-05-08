@@ -9,6 +9,7 @@ import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
 
 import { CenteredStaticModal } from "../centeredStaticModal";
+import { WaitWithSpinner } from "./waitWithSpinner";
 
 import Refresh_Icon from "../../images/forward-restore.png";
 
@@ -20,7 +21,7 @@ export const SearchOpponent = (props: Props) => {
     string[],
     React.Dispatch<React.SetStateAction<string[]>>
   ] = React.useState(null);
-  const [inviting, SetInviting] = React.useState(false);
+  const [inviting, setInviting] = React.useState(false);
   const history = useHistory();
 
   React.useEffect(() => {
@@ -54,6 +55,7 @@ export const SearchOpponent = (props: Props) => {
   };
 
   const handleInvite = (name: string) => {
+    setInviting(true);
     ws.send(
       JSON.stringify({
         type: "invite",
@@ -79,42 +81,53 @@ export const SearchOpponent = (props: Props) => {
     </ListGroup>
   );
 
-  console.log(ActiveOpponents);
-
   return (
     <CenteredStaticModal show={showModal} onHide={() => setShowModal(false)}>
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          Search for Opponent
-          <Form>
-            <Form.Control
-              size="xs"
-              type="text"
-              placeholder="Name..."
-              onChange={(evt: React.ChangeEvent<HTMLInputElement>) =>
-                setFilter(evt.target.value)
-              }
-            />
-          </Form>
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Container style={{ marginBottom: "10px" }}>
-          <Row>
-            <Container onClick={handleRefresh}>
-              <Button variant="primary">
-                Refresh List
-                <Image
-                  src={Refresh_Icon}
-                  style={{ width: "1rem", height: "1rem", marginLeft: "5px" }}
-                  roundedCircle
+      {!inviting ? (
+        <>
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">
+              Search for Opponent
+              <Form>
+                <Form.Control
+                  size="xs"
+                  type="text"
+                  placeholder="Name..."
+                  onChange={(evt: React.ChangeEvent<HTMLInputElement>) =>
+                    setFilter(evt.target.value)
+                  }
                 />
-              </Button>
+              </Form>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Container style={{ marginBottom: "10px" }}>
+              <Row>
+                <Container onClick={handleRefresh}>
+                  <Button variant="primary">
+                    Refresh List
+                    <Image
+                      src={Refresh_Icon}
+                      style={{
+                        width: "1rem",
+                        height: "1rem",
+                        marginLeft: "5px",
+                      }}
+                      roundedCircle
+                    />
+                  </Button>
+                </Container>
+              </Row>
             </Container>
-          </Row>
-        </Container>
-        {opponentsFiltered ? ActiveOpponents : ""}
-      </Modal.Body>
+            {opponentsFiltered ? ActiveOpponents : ""}
+          </Modal.Body>
+        </>
+      ) : (
+        <WaitWithSpinner
+          title="Inviting Opponent"
+          message="Invitation sent, waiting for opponent to respond."
+        />
+      )}
     </CenteredStaticModal>
   );
 };
