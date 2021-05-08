@@ -37,7 +37,7 @@ export const ColorPicker = (props: Props) => {
 
   /**
    * @description Create a row for the colorPicker.
-   * @param fields - The fields of the row.
+   * @param row - Metadata to build up the row.
    */
   const createRow = (row: ColorScheme): JSX.Element => {
     return (
