@@ -62,8 +62,6 @@ export const SearchOpponent = (props: Props) => {
     );
   };
 
-  const handleSubmit = () => {};
-
   const ActiveOpponents = (
     <ListGroup>
       {opponentsFiltered ? (

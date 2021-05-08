@@ -19,5 +19,5 @@ export const CenteredStaticModal = (props: ModalProps) => {
 type ModalProps = {
   onHide: Function;
   show: boolean;
-  children: React.ReactElement[];
+  children: React.ReactElement | React.ReactElement[];
 };

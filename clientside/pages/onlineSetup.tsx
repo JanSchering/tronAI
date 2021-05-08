@@ -13,6 +13,7 @@ import PlayButton_White_Image from "../images/play-button_white.png";
 import { ChooseName } from "../components/modals/chooseName";
 import { SearchOpponent } from "../components/modals/searchOpponent";
 import { Invite } from "../components/modals/invite";
+import { ColorPicker } from "../components/modals/colorPicker";
 
 export const OnlineSetup = (): React.ReactElement => {
   const UNKNOWN_PLAYER = "Unknown";
@@ -24,6 +25,7 @@ export const OnlineSetup = (): React.ReactElement => {
     Invite,
     React.Dispatch<React.SetStateAction<Invite>>
   ] = React.useState(null);
+  const [showColorPicker, setShowColorPicker] = React.useState(false);
 
   React.useEffect(() => {
     var ws = new WebSocket("ws://localhost:8999/");
@@ -113,6 +115,18 @@ export const OnlineSetup = (): React.ReactElement => {
               decline={decline}
               sender={inviteReceived ? inviteReceived.sender : ""}
             />
+            <ColorPicker
+              showModal={showColorPicker}
+              setShowModal={setShowColorPicker}
+              setColor={() => {}}
+            />
+            <Button
+              variant="success"
+              size="lg"
+              onClick={() => setShowColorPicker(true)}
+            >
+              Test ColorPicker
+            </Button>
           </Row>
         </Card.Body>
       </Card>
