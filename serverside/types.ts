@@ -6,7 +6,7 @@ export interface ExtWebSocket extends WebSocket {
 
 export type RegisteredClient = {
   name: string;
-  client: ExtWebSocket;
+  socket: ExtWebSocket;
 };
 
 export type Invite = {

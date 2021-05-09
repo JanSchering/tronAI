@@ -1,27 +1,17 @@
 import { ExtWebSocket, Invite, RegisteredClient } from "./types";
 
 /**
- * @description Find the index of the first matching RegisteredClient.
- * @param registry - List of registered clients.
- * @param client - a WebSocket client object.
- * @returns the index of the found client
+ * @description Create and dispatch events from received messages.
+ * @param message - The message from the client.
+ * @param client - The client to dispatch to.
  */
-export const findIndexByClient = (
-  registry: RegisteredClient[],
-  client: ExtWebSocket
-): number => {
-  return registry.findIndex((regObj) => regObj.client === client);
-};
-
-/**
- * @description Find the first matching RegisteredClient by name.
- * @param registry
- * @param name
- * @returns The first matching registered client
- */
-export const findByName = (
-  registry: RegisteredClient[],
-  name: string
-): RegisteredClient => {
-  return registry.find((regObj) => regObj.name === name);
+export const toEvent = (message: string, client: ExtWebSocket) => {
+  try {
+    console.log(message);
+    var event = JSON.parse(message);
+    console.log(event.type);
+    client.emit(event.type, event.payload);
+  } catch (err) {
+    console.log("not an event", err);
+  }
 };
